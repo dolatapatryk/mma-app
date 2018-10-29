@@ -28,7 +28,7 @@ public class Db {
 			HikariDataSource hikariDataSource = new HikariDataSource(config);
 			dbConnection = new ConnectionData(hikariDataSource, new JdbcTemplate(hikariDataSource), 
 					new NamedParameterJdbcTemplate(hikariDataSource));
-			System.out.println("Connected to db");
+			logger.info("Succesful connected to db");
 		} catch (Exception e) {
 			logger.warn(e.getMessage());
 		}

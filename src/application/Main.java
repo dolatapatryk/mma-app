@@ -1,5 +1,7 @@
 package application;
 	
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,6 +9,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import models.PlayerModel;
+import repositories.PlayerRepository;
 import utils.Db;
 
 
@@ -23,6 +27,9 @@ public class Main extends Application {
 			primaryStage.show();
 			
 			Db.addConnection();
+			List<PlayerModel> players = PlayerRepository.getPlayersByOrganisation("ufc");
+			System.out.println(players);
+
 		} catch(Exception e) {
 			logger.warn(e.getMessage());
 		}
