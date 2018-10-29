@@ -1,6 +1,6 @@
 package application;
 	
-import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +9,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import models.PlayerModel;
-import repositories.PlayerRepository;
+import models.OrganisationModel;
+import repositories.OrganisationRepository;
 import utils.Db;
 
 
@@ -27,8 +27,9 @@ public class Main extends Application {
 			primaryStage.show();
 			
 			Db.addConnection();
-			List<PlayerModel> players = PlayerRepository.getPlayersByOrganisation("ufc");
-			System.out.println(players);
+			Optional<OrganisationModel> o = OrganisationRepository.get("ufc");
+			if (o.isPresent())
+				System.out.println(o.get());
 
 		} catch(Exception e) {
 			logger.warn(e.getMessage());

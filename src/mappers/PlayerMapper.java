@@ -20,6 +20,7 @@ public class PlayerMapper implements RowMapper {
 		p.setTies(rs.getInt("ties"));
 		p.setClub(rs.getString("club"));
 		p.setOrganisation(rs.getString("organisation"));
+		
 		return p;
 	}
 

@@ -30,7 +30,7 @@ public class PlayerRepository {
 				playerMapper);
 	}
 	
-	public static Optional<PlayerModel> getPlayer(int id) {
+	public static Optional<PlayerModel> get(int id) {
 		List<PlayerModel> players = getPlayersByIds(Arrays.asList(id));
 		
 		return players.isEmpty() ? Optional.empty() : Optional.ofNullable(players.get(0));
