@@ -34,6 +34,7 @@ public class RootViewController {
 	private MenuItem mainSceneMenuItem;
 	
 	private AnchorPane organisationView = null;
+	private OrganisationViewController organisationViewController = null;
 	@Getter private AnchorPane mainView = null;
 	
 	@FXML
@@ -48,12 +49,17 @@ public class RootViewController {
 				organisationMenu.getItems().add(menuItem);
 			});
 		
-		organisationMenu.getItems().forEach(item -> item.setOnAction(i -> setOrganisationView()));
+		organisationMenu.getItems().forEach(item -> item.
+				setOnAction(i -> setOrganisationView(item.getText())));
 	}
 	
-	private void setOrganisationView() {
+	private void setOrganisationView(String organisation) {
+		OrganisationViewController.organisation = organisation;
 		Main.getRootLayout().setCenter(this.organisationView);
-		logger.info("przelaczono na widok organizacji");
+		organisationViewController.getText().setText("ekran organizacji: " + organisation);
+		organisationViewController.getRefreshButton().fire();
+		logger.info("przelaczono na widok organizacji: " + organisation);
+		logger.debug(organisation);
 	}
 	
 	private void loadOrganisationView() {
@@ -63,6 +69,7 @@ public class RootViewController {
 		try {
 			organisationLoader.setLocation(organisationViewFXML.toURI().toURL());
 			this.organisationView = (AnchorPane) organisationLoader.load();
+			this.organisationViewController = organisationLoader.getController();
 		} catch (Exception e) {
 			logger.warn(e.getMessage());
 		}
