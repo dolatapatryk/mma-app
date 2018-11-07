@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import lombok.Getter;
 import models.PlayerModel;
 import repositories.PlayerRepository;
@@ -25,12 +27,16 @@ public class OrganisationViewController {
 	@FXML 
 	@Getter private Text text;
 	@FXML
-	@Getter private Button refreshButton;
+	@Getter private  Button refreshButton;
+	@FXML
+	private Button addPlayerButton;
+	
+	@Getter private static Stage addPlayerStage = null;
 	
 	@FXML
-	private ListView<String> playerList;
+	private ListView<PlayerModel> playerList;
 	
-	private ObservableList<String> playerItems;
+	private ObservableList<PlayerModel> playerItems;
 	
 	@FXML
 	private void initialize() {
@@ -41,13 +47,23 @@ public class OrganisationViewController {
 	private void addPlayersToList() {
 		playerItems.clear();
 		List<PlayerModel> players = PlayerRepository.getPlayersByOrganisation(organisation);
-		playerItems.addAll(players.stream().map(p -> p.getName() + " " +  p.getSurname())
-				.collect(Collectors.toList()));
+		playerItems.addAll(players);
 	}
 	
 	@FXML
 	private void handleRefreshButton() {
 		addPlayersToList();
+	}
+	
+	@FXML
+	private void handleAddPlayerButton() {
+		addPlayerStage = new Stage();
+		addPlayerStage.setTitle("Dodaj zawodnika");
+		Scene scene = new Scene(RootViewController.getAddPlayerView());
+		addPlayerStage.setScene(scene);
+		addPlayerStage.setX(500);
+		addPlayerStage.setY(500);
+		addPlayerStage.show();
 	}
 	
 }

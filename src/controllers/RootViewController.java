@@ -10,9 +10,11 @@ import org.slf4j.LoggerFactory;
 import application.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import lombok.Getter;
 import models.OrganisationModel;
 import repositories.OrganisationRepository;
@@ -34,7 +36,11 @@ public class RootViewController {
 	private MenuItem mainSceneMenuItem;
 	
 	private AnchorPane organisationView = null;
-	private OrganisationViewController organisationViewController = null;
+	@Getter private static OrganisationViewController organisationViewController = null;
+	
+	@Getter private static AnchorPane addPlayerView = null;
+	@Getter private static AddPlayerViewController addPlayerViewController = null;
+	
 	@Getter private AnchorPane mainView = null;
 	
 	@FXML
@@ -69,7 +75,20 @@ public class RootViewController {
 		try {
 			organisationLoader.setLocation(organisationViewFXML.toURI().toURL());
 			this.organisationView = (AnchorPane) organisationLoader.load();
-			this.organisationViewController = organisationLoader.getController();
+			organisationViewController = organisationLoader.getController();
+		} catch (Exception e) {
+			logger.warn(e.getMessage());
+		}
+	}
+	
+	private void loadAddPlayerView() {
+		FXMLLoader addPlayerLoader = new FXMLLoader();
+		File addPlayerViewFXML = new File(System.getProperty("user.dir") + 
+				"/resources/AddPlayerView.fxml");
+		try {
+			addPlayerLoader.setLocation(addPlayerViewFXML.toURI().toURL());
+			addPlayerView = (AnchorPane) addPlayerLoader.load();
+			addPlayerViewController = addPlayerLoader.getController();
 		} catch (Exception e) {
 			logger.warn(e.getMessage());
 		}
@@ -95,6 +114,7 @@ public class RootViewController {
 	private void loadOtherViews() {
 		loadMainScene();
 		loadOrganisationView();
+		loadAddPlayerView();
 	}
 	
 	@FXML
@@ -102,4 +122,5 @@ public class RootViewController {
 		Main.getRootLayout().setCenter(this.mainView);
 		logger.info("przelaczono do ekranu glownego");
 	}
+	
 }

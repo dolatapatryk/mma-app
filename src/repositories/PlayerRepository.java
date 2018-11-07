@@ -1,10 +1,17 @@
 package repositories;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import mappers.PlayerMapper;
@@ -13,6 +20,7 @@ import utils.Db;
 
 public class PlayerRepository {
 	static PlayerMapper playerMapper = new PlayerMapper();
+	static Logger logger = LoggerFactory.getLogger(PlayerRepository.class);
 
 	public static List<PlayerModel> getPlayers() {
 		String sql = "SELECT * FROM players";
@@ -46,5 +54,26 @@ public class PlayerRepository {
 		String sql = "SELECT * FROM players WHERE organisation = ?";
 		
 		return Db.getJdbcTemplate().query(sql, new Object[] {organisationName}, playerMapper);
+	}
+	
+	public static void create(PlayerModel player) {
+		String sql = "INSERT INTO players(name, surname, club, organisation) values(?, ?, ?, ?)";
+		
+		try (Connection connection = Db.getJdbcTemplate().getDataSource().getConnection()) {
+			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, player.getName());
+			ps.setString(2, player.getSurname());
+			ps.setString(3, player.getClub());
+			ps.setString(4, player.getOrganisation());
+			ps.execute();
+			
+			ResultSet generatedKeys = ps.getGeneratedKeys();
+			generatedKeys.next();
+			player.setId(generatedKeys.getInt(1));
+			logger.info("Utworzono zawodnika o id: {}", player.getId());
+		} catch (SQLException e) {
+			logger.warn(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 }

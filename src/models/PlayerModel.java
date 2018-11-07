@@ -12,4 +12,9 @@ public @Data class PlayerModel {
 	private int ties;
 	private String organisation;
 	private String club;
+	
+	@Override
+	public String toString() {
+		return this.name + " " + this.surname;
+	}
 }

@@ -10,5 +10,6 @@
       <Text fx:id="text" layoutX="507.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ekran organizacji" wrappingWidth="162.7294921875" />
       <ListView fx:id="playerList" layoutX="77.0" layoutY="51.0" prefHeight="259.0" prefWidth="265.0" />
       <Button fx:id="refreshButton" layoutX="1128.0" layoutY="648.0" mnemonicParsing="false" onAction="#handleRefreshButton" text="refresh" visible="false" />
+      <Button fx:id="addPlayerButton" layoutX="92.0" layoutY="357.0" mnemonicParsing="false" onAction="#handleAddPlayerButton" text="Dodaj zawodnika" />
    </children>
 </AnchorPane>
