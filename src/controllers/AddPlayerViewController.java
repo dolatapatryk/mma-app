@@ -1,8 +1,8 @@
 package controllers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import application.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -57,7 +57,8 @@ public class AddPlayerViewController {
 		
 		PlayerRepository.create(player);
 		
-		OrganisationViewController.getAddPlayerStage().close();
+		reset();
+		Main.getAddPlayerStage().close();
 		RootViewController.getOrganisationViewController().getRefreshButton().fire();
 	}
 	
@@ -71,5 +72,12 @@ public class AddPlayerViewController {
 		orgItems.clear();
 		List<OrganisationModel> orgs = OrganisationRepository.getOrganisations();
 		orgItems.addAll(orgs);
+	}
+	
+	private void reset() {
+		nameTextField.setText("");
+		surnameTextField.setText("");
+		clubChoiceBox.setValue(null);
+		organisationChoiceBox.setValue(null);
 	}
 }

@@ -6,14 +6,13 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import application.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import lombok.Getter;
 import models.OrganisationModel;
 import models.PlayerModel;
@@ -33,12 +32,14 @@ public class OrganisationViewController {
 	@FXML
 	private Text organisationBudgetText;
 	@FXML
+	private Text organisationAddressText;
+	@FXML
+	private Text organisationCityText;
+	@FXML
 	@Getter private  Button refreshButton;
 	@FXML
 	private Button addPlayerButton;
-	
-	@Getter private static Stage addPlayerStage = null;
-	
+		
 	@FXML
 	private ListView<PlayerModel> playerList;
 	
@@ -62,19 +63,15 @@ public class OrganisationViewController {
 		if(organisationModel.isPresent()) {
 			organisationNameText.setText(organisationModel.get().getName());
 			organisationBudgetText.setText(String.valueOf(organisationModel.get().getBudget()));
+			organisationAddressText.setText(organisationModel.get().getAddress());
+			organisationCityText.setText(organisationModel.get().getCity());
 		}
 		addPlayersToList();
 	}
 	
 	@FXML
 	private void handleAddPlayerButton() {
-		addPlayerStage = new Stage();
-		addPlayerStage.setTitle("Dodaj zawodnika");
-		Scene scene = new Scene(RootViewController.getAddPlayerView());
-		addPlayerStage.setScene(scene);
-		addPlayerStage.setX(500);
-		addPlayerStage.setY(500);
-		addPlayerStage.show();
+		Main.getAddPlayerStage().show();
 	}
 	
 }

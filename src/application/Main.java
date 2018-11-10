@@ -20,6 +20,8 @@ public class Main extends Application {
 	Logger logger = LoggerFactory.getLogger(Main.class);
 	
 	private Stage primaryStage;
+	@Getter private static Stage addPlayerStage;
+	@Getter private static Stage addOrganisationStage;
 	@Getter private static BorderPane rootLayout;
 	
 	@Override
@@ -30,6 +32,7 @@ public class Main extends Application {
 			this.primaryStage.setTitle("MMA");
 			
 			initRootLayout();
+			initAddPlayerStage();
 		} catch(Exception e) {
 			logger.warn(e.getMessage());
 		}
@@ -51,6 +54,24 @@ public class Main extends Application {
 		Scene scene = new Scene(rootLayout);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	}
+	
+	public void initAddPlayerStage() {
+		addPlayerStage = new Stage();
+		addPlayerStage.setTitle("Dodaj zawodnika");
+		addPlayerStage.setX(500);
+		addPlayerStage.setY(500);
+		Scene scene = new Scene(RootViewController.getAddPlayerView());
+		addPlayerStage.setScene(scene);
+	}
+	
+	public void initAddOrganisationStage() {
+		addOrganisationStage = new Stage();
+		addOrganisationStage.setTitle("Dodaj organizacje");
+		addOrganisationStage.setX(500);
+		addOrganisationStage.setY(500);
+		Scene scene = new Scene(RootViewController.getAddOrganisationView());
+		addOrganisationStage.setScene(scene);
 	}
 	
 	public static void main(String[] args) {

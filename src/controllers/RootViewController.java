@@ -10,11 +10,9 @@ import org.slf4j.LoggerFactory;
 import application.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import lombok.Getter;
 import models.OrganisationModel;
 import repositories.OrganisationRepository;
@@ -40,6 +38,9 @@ public class RootViewController {
 	
 	@Getter private static AnchorPane addPlayerView = null;
 	@Getter private static AddPlayerViewController addPlayerViewController = null;
+	
+	@Getter private static AnchorPane addOrganisationView = null;
+	
 	
 	@Getter private AnchorPane mainView = null;
 	
@@ -90,7 +91,19 @@ public class RootViewController {
 			addPlayerView = (AnchorPane) addPlayerLoader.load();
 			addPlayerViewController = addPlayerLoader.getController();
 		} catch (Exception e) {
-			logger.warn(e.getMessage());
+			logger.info(e.getMessage());
+		}
+	}
+	
+	private void loadAddOrganisationView() {
+		FXMLLoader addOrganisationLoader = new FXMLLoader();
+		File addOrganisationViewFXML = new File(System.getProperty("user.dir") +
+				"/resources/AddOrganisationView.fxml");
+		try {
+			addOrganisationLoader.setLocation(addOrganisationViewFXML.toURI().toURL());
+			addOrganisationView = (AnchorPane) addOrganisationLoader.load();
+		} catch (Exception e) {
+			logger.info(e.getMessage());
 		}
 	}
 	
@@ -115,6 +128,7 @@ public class RootViewController {
 		loadMainScene();
 		loadOrganisationView();
 		loadAddPlayerView();
+		loadAddOrganisationView();
 	}
 	
 	@FXML
