@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="739.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainViewController">
+<AnchorPane prefHeight="739.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainViewController">
    <children>
       <Text layoutX="428.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ekran głowny, wybierz organizacje" />
       <Button fx:id="addPlayerButton" layoutX="179.0" layoutY="501.0" mnemonicParsing="false" onAction="#handleAddPlayerButton" text="Dodaj zawodnika" />

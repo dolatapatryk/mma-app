@@ -1,5 +1,6 @@
 package controllers;
 
+import application.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -34,6 +35,9 @@ public class AddOrganisationViewController {
 		OrganisationRepository.create(org);
 		
 		reset();
+		Main.getAddOrganisationStage().close();
+		Main.getRootViewController().loadOrganisationsToMenu();
+		RootViewController.getAddPlayerViewController().addOrgsToList();
 	}
 	
 	private void reset() {

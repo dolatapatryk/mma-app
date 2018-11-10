@@ -22,7 +22,9 @@ public class Main extends Application {
 	private Stage primaryStage;
 	@Getter private static Stage addPlayerStage;
 	@Getter private static Stage addOrganisationStage;
+	@Getter private static Stage addClubStage;
 	@Getter private static BorderPane rootLayout;
+	@Getter private static RootViewController rootViewController = null;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -33,6 +35,8 @@ public class Main extends Application {
 			
 			initRootLayout();
 			initAddPlayerStage();
+			initAddOrganisationStage();
+			initAddClubStage();
 		} catch(Exception e) {
 			logger.warn(e.getMessage());
 		}
@@ -45,7 +49,7 @@ public class Main extends Application {
 					"/resources/RootView.fxml");	
 			loaderRoot.setLocation(rootViewFXML.toURI().toURL());
 			rootLayout = (BorderPane) loaderRoot.load();
-			RootViewController rootViewController = loaderRoot.getController();
+			rootViewController = loaderRoot.getController();
 			rootLayout.setCenter(rootViewController.getMainView());
 		} catch (IOException e) {
 			logger.warn(e.getMessage());
@@ -72,6 +76,15 @@ public class Main extends Application {
 		addOrganisationStage.setY(500);
 		Scene scene = new Scene(RootViewController.getAddOrganisationView());
 		addOrganisationStage.setScene(scene);
+	}
+	
+	public void initAddClubStage() {
+		addClubStage = new Stage();
+		addClubStage.setTitle("Dodaj klub");
+		addClubStage.setX(500);
+		addClubStage.setY(500);
+		Scene scene = new Scene(RootViewController.getAddClubView());
+		addClubStage.setScene(scene);
 	}
 	
 	public static void main(String[] args) {

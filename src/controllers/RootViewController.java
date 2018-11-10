@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import application.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
@@ -19,10 +20,10 @@ import repositories.OrganisationRepository;
 
 public class RootViewController {
 	
-	Logger logger = LoggerFactory.getLogger(RootViewController.class);	
-
+	static Logger logger = LoggerFactory.getLogger(RootViewController.class);	
+	
 	@FXML
-	private Menu organisationMenu;
+	@Getter private Menu organisationMenu;
 	
 	@FXML 
 	private Menu actionMenu;
@@ -33,7 +34,7 @@ public class RootViewController {
 	@FXML 
 	private MenuItem mainSceneMenuItem;
 	
-	private AnchorPane organisationView = null;
+	private static AnchorPane organisationView = null;
 	@Getter private static OrganisationViewController organisationViewController = null;
 	
 	@Getter private static AnchorPane addPlayerView = null;
@@ -41,14 +42,30 @@ public class RootViewController {
 	
 	@Getter private static AnchorPane addOrganisationView = null;
 	
+	@Getter private static AnchorPane addClubView = null;
 	
 	@Getter private AnchorPane mainView = null;
+		
 	
 	@FXML
-	private void initialize() {
+	private void initialize() {		
 		loadOtherViews();
-		
+				
+		loadOrganisationsToMenu();
+	}
+	
+	private void setOrganisationView(String organisation) {
+		OrganisationViewController.organisation = organisation;
+		Main.getRootLayout().setCenter(organisationView);
+		organisationViewController.getText().setText("ekran organizacji: " + organisation);
+		organisationViewController.getRefreshButton().fire();
+		logger.info("przelaczono na widok organizacji: " + organisation);
+		logger.info(organisation);
+	}
+	
+	public void loadOrganisationsToMenu() {
 		List<OrganisationModel> orgs = OrganisationRepository.getOrganisations();
+		organisationMenu.getItems().clear();
 		
 		orgs.stream().map(o -> o.getName()).collect(Collectors.toList())
 			.forEach(o -> {
@@ -56,17 +73,12 @@ public class RootViewController {
 				organisationMenu.getItems().add(menuItem);
 			});
 		
-		organisationMenu.getItems().forEach(item -> item.
-				setOnAction(i -> setOrganisationView(item.getText())));
+		setOnActionsToOrganisationMenu();
 	}
 	
-	private void setOrganisationView(String organisation) {
-		OrganisationViewController.organisation = organisation;
-		Main.getRootLayout().setCenter(this.organisationView);
-		organisationViewController.getText().setText("ekran organizacji: " + organisation);
-		organisationViewController.getRefreshButton().fire();
-		logger.info("przelaczono na widok organizacji: " + organisation);
-		logger.debug(organisation);
+	private void setOnActionsToOrganisationMenu() {
+		organisationMenu.getItems().forEach(item -> item
+				.setOnAction(i -> setOrganisationView(item.getText())));
 	}
 	
 	private void loadOrganisationView() {
@@ -75,7 +87,7 @@ public class RootViewController {
 				"/resources/OrganisationView.fxml");	
 		try {
 			organisationLoader.setLocation(organisationViewFXML.toURI().toURL());
-			this.organisationView = (AnchorPane) organisationLoader.load();
+			organisationView = (AnchorPane) organisationLoader.load();
 			organisationViewController = organisationLoader.getController();
 		} catch (Exception e) {
 			logger.warn(e.getMessage());
@@ -107,6 +119,18 @@ public class RootViewController {
 		}
 	}
 	
+	private void loadAddClubView() {
+		FXMLLoader addClubLoader = new FXMLLoader();
+		File addClubViewFXML = new File(System.getProperty("user.dir") +
+				"/resources/AddClubView.fxml");
+		try {
+			addClubLoader.setLocation(addClubViewFXML.toURI().toURL());
+			addOrganisationView = (AnchorPane) addClubLoader.load();
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+		}
+	}
+	
 	private void loadMainScene() {
 		FXMLLoader mainSceneLoader = new FXMLLoader();
 		File mainSceneViewFXML = new File(System.getProperty("user.dir") + 
@@ -129,6 +153,7 @@ public class RootViewController {
 		loadOrganisationView();
 		loadAddPlayerView();
 		loadAddOrganisationView();
+		loadAddClubView();
 	}
 	
 	@FXML

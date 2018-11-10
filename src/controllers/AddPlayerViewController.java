@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import lombok.Getter;
 import models.ClubModel;
 import models.OrganisationModel;
 import models.PlayerModel;
@@ -62,13 +63,13 @@ public class AddPlayerViewController {
 		RootViewController.getOrganisationViewController().getRefreshButton().fire();
 	}
 	
-	private void addClubsToList() {
+	public void addClubsToList() {
 		clubItems.clear();
 		List<ClubModel> clubs = ClubRepository.getClubs();
 		clubItems.addAll(clubs);
 	}
 	
-	private void addOrgsToList() {
+	public void addOrgsToList() {
 		orgItems.clear();
 		List<OrganisationModel> orgs = OrganisationRepository.getOrganisations();
 		orgItems.addAll(orgs);

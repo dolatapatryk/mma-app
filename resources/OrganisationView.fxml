@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="739.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OrganisationViewController">
+<AnchorPane prefHeight="739.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OrganisationViewController">
    <children>
       <Text fx:id="text" layoutX="507.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ekran organizacji" wrappingWidth="162.7294921875" />
       <ListView fx:id="playerList" layoutX="77.0" layoutY="51.0" prefHeight="259.0" prefWidth="265.0" />

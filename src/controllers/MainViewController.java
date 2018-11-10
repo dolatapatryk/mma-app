@@ -26,6 +26,6 @@ public class MainViewController {
 	
 	@FXML
 	private void handleAddClubButton() {
-		
+		Main.getAddClubStage().show();
 	}
 }
