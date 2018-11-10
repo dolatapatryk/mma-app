@@ -76,4 +76,10 @@ public class PlayerRepository {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void delete(int id) {
+		String sql = "DELETE FROM players WHERE id = ?";
+		
+		Db.getJdbcTemplate().update(sql, new Object[] {id});
+	}
 }

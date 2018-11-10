@@ -14,6 +14,8 @@ public class OrganisationMapper implements RowMapper {
 		OrganisationModel o = new OrganisationModel();
 		o.setName(rs.getString("name"));
 		o.setBudget(rs.getDouble("budget"));
+		o.setAddress(rs.getString("address"));
+		o.setCity(rs.getString("city"));
 		
 		return o;
 	}

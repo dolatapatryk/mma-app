@@ -1,7 +1,7 @@
 package controllers;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import lombok.Getter;
+import models.OrganisationModel;
 import models.PlayerModel;
+import repositories.OrganisationRepository;
 import repositories.PlayerRepository;
 
 public class OrganisationViewController {
@@ -26,6 +28,10 @@ public class OrganisationViewController {
 	
 	@FXML 
 	@Getter private Text text;
+	@FXML
+	private Text organisationNameText;
+	@FXML
+	private Text organisationBudgetText;
 	@FXML
 	@Getter private  Button refreshButton;
 	@FXML
@@ -52,6 +58,11 @@ public class OrganisationViewController {
 	
 	@FXML
 	private void handleRefreshButton() {
+		Optional<OrganisationModel> organisationModel = OrganisationRepository.get(organisation);
+		if(organisationModel.isPresent()) {
+			organisationNameText.setText(organisationModel.get().getName());
+			organisationBudgetText.setText(String.valueOf(organisationModel.get().getBudget()));
+		}
 		addPlayersToList();
 	}
 	
