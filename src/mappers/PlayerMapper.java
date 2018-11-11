@@ -20,6 +20,12 @@ public class PlayerMapper implements RowMapper {
 		p.setDraws(rs.getInt("draws"));
 		p.setClub(rs.getString("club"));
 		p.setOrganisation(rs.getString("organisation"));
+		p.setWeightClass(rs.getString("weight_class"));
+		p.setStandUp(rs.getInt("stand_up"));
+		p.setGrappling(rs.getInt("grappling"));
+		p.setWrestling(rs.getInt("wrestling"));
+		p.setClinch(rs.getInt("clinch"));
+		p.setCoach(rs.getInt("coach"));
 		
 		return p;
 	}

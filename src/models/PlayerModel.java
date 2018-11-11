@@ -12,6 +12,12 @@ public @Data class PlayerModel {
 	private int draws;
 	private String organisation;
 	private String club;
+	private String weightClass;
+	private int standUp;
+	private int grappling;
+	private int wrestling;
+	private int clinch;
+	private int coach;
 	
 	@Override
 	public String toString() {
