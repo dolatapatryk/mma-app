@@ -17,7 +17,7 @@ public class PlayerMapper implements RowMapper {
 		p.setSurname(rs.getString("surname"));
 		p.setWins(rs.getInt("wins"));
 		p.setLosses(rs.getInt("losses"));
-		p.setTies(rs.getInt("ties"));
+		p.setDraws(rs.getInt("draws"));
 		p.setClub(rs.getString("club"));
 		p.setOrganisation(rs.getString("organisation"));
 		

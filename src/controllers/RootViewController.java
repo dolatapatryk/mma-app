@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import application.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
@@ -125,7 +124,7 @@ public class RootViewController {
 				"/resources/AddClubView.fxml");
 		try {
 			addClubLoader.setLocation(addClubViewFXML.toURI().toURL());
-			addOrganisationView = (AnchorPane) addClubLoader.load();
+			addClubView = (AnchorPane) addClubLoader.load();
 		} catch (Exception e) {
 			logger.info(e.getMessage());
 		}

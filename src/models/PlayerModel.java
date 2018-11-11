@@ -9,7 +9,7 @@ public @Data class PlayerModel {
 	private String surname;
 	private int wins;
 	private int losses;
-	private int ties;
+	private int draws;
 	private String organisation;
 	private String club;
 	
