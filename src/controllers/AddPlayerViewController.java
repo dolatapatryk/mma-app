@@ -15,8 +15,8 @@ import models.OrganisationModel;
 import models.PlayerModel;
 import models.WeightClassModel;
 import repositories.ClubRepository;
-import repositories.CoachRepository;
 import repositories.OrganisationRepository;
+import repositories.PersonRepository;
 import repositories.PlayerRepository;
 import repositories.WeightClassRepository;
 
@@ -142,7 +142,7 @@ public class AddPlayerViewController {
 	
 	public void addCoachesToList() {
 		coachItems.clear();
-		List<CoachModel> coaches = CoachRepository.getCoaches();
+		List<CoachModel> coaches = PersonRepository.getCoaches();
 		coachItems.addAll(coaches);
 	}
 	

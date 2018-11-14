@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import application.Main;
 import javafx.collections.FXCollections;
@@ -15,9 +16,8 @@ import models.OrganisationModel;
 import models.PersonModel;
 import models.PlayerModel;
 import repositories.ClubRepository;
-import repositories.CoachRepository;
-import repositories.JudgeRepository;
 import repositories.OrganisationRepository;
+import repositories.PersonRepository;
 import repositories.PlayerRepository;
 
 public class MainViewController {
@@ -80,9 +80,9 @@ public class MainViewController {
 	
 	public void addJudgesCoachesToList() {
 		judgeCoachItems.clear();
-		List<JudgeModel> judges = JudgeRepository.getJudges();
+		List<JudgeModel> judges = PersonRepository.getJudges();
 		judgeCoachItems.addAll(judges);
-		List<CoachModel> coaches = CoachRepository.getCoaches();
+		List<CoachModel> coaches = PersonRepository.getCoaches();
 		judgeCoachItems.addAll(coaches);
 		judgeCoachItems.sort((e, f) -> {
 			if(e.getId() > f.getId())
