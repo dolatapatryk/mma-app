@@ -1,12 +1,11 @@
 package models;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-public @Data class PlayerModel {
+@EqualsAndHashCode(callSuper=true)
+public @Data class PlayerModel extends PersonModel {
 
-	private int id;
-	private String name;
-	private String surname;
 	private int wins;
 	private int losses;
 	private int draws;
@@ -19,8 +18,10 @@ public @Data class PlayerModel {
 	private int clinch;
 	private int coach;
 	
+	
 	@Override
 	public String toString() {
-		return this.name + " " + this.surname;
+		return super.toString();
 	}
+
 }

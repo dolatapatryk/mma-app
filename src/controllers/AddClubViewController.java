@@ -33,6 +33,7 @@ public class AddClubViewController {
 		reset();
 		Main.getAddClubStage().close();
 		RootViewController.getAddPlayerViewController().addClubsToList();
+		RootViewController.getMainViewController().addClubsToList();
 	}
 	
 	private void reset() {

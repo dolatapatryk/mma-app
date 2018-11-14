@@ -56,8 +56,16 @@ public class PlayerRepository {
 		return Db.getJdbcTemplate().query(sql, new Object[] {organisationName}, playerMapper);
 	}
 	
+	public static List<PlayerModel> getPlayersByWeightClass(String weightClass) {
+		String sql = "SELECT * FROM players WHERE weight_class = ?";
+		
+		return Db.getJdbcTemplate().query(sql, new Object[] {weightClass}, playerMapper);
+	}
+	
 	public static void create(PlayerModel player) {
-		String sql = "INSERT INTO players(name, surname, club, organisation) values(?, ?, ?, ?)";
+		String sql = "INSERT INTO players(name, surname, club, organisation, weight_class, "
+				+ "stand_up, grappling, wrestling, clinch, coach) values(?, ?, ?, ?, ?, ?, ?, "
+				+ "?, ?, ?)";
 		
 		try (Connection connection = Db.getJdbcTemplate().getDataSource().getConnection()) {
 			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -65,6 +73,12 @@ public class PlayerRepository {
 			ps.setString(2, player.getSurname());
 			ps.setString(3, player.getClub());
 			ps.setString(4, player.getOrganisation());
+			ps.setString(5, player.getWeightClass());
+			ps.setInt(6, player.getStandUp());
+			ps.setInt(7, player.getGrappling());
+			ps.setInt(8, player.getWrestling());
+			ps.setInt(9, player.getClinch());
+			ps.setInt(10, player.getCoach());
 			ps.execute();
 			
 			ResultSet generatedKeys = ps.getGeneratedKeys();

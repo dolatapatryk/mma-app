@@ -44,6 +44,7 @@ public class RootViewController {
 	@Getter private static AnchorPane addClubView = null;
 	
 	@Getter private AnchorPane mainView = null;
+	@Getter private static MainViewController mainViewController = null;
 		
 	
 	@FXML
@@ -137,6 +138,7 @@ public class RootViewController {
 		try {
 			mainSceneLoader.setLocation(mainSceneViewFXML.toURI().toURL());
 			this.mainView = (AnchorPane) mainSceneLoader.load();
+			mainViewController = mainSceneLoader.getController();
 		} catch (Exception e) {
 			logger.warn(e.getMessage());
 		}

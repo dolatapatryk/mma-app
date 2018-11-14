@@ -36,7 +36,7 @@ public class OrganisationViewController {
 	@FXML
 	private Text organisationCityText;
 	@FXML
-	@Getter private  Button refreshButton;
+	@Getter private Button refreshButton;
 	@FXML
 	private Button addPlayerButton;
 		

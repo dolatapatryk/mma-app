@@ -38,6 +38,7 @@ public class AddOrganisationViewController {
 		Main.getAddOrganisationStage().close();
 		Main.getRootViewController().loadOrganisationsToMenu();
 		RootViewController.getAddPlayerViewController().addOrgsToList();
+		RootViewController.getMainViewController().addOrgsToList();
 	}
 	
 	private void reset() {
