@@ -9,6 +9,6 @@ public @Data class CoachModel extends PersonModel {
 	
 	@Override
 	public String toString() {
-		return this.getName() + " " + this.getSurname() + " - Trener";
+		return "Trener " + this.getName() + " " + this.getSurname();
 	}
 }

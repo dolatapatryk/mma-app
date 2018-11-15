@@ -23,6 +23,7 @@ public class Main extends Application {
 	@Getter private static Stage addPlayerStage;
 	@Getter private static Stage addOrganisationStage;
 	@Getter private static Stage addClubStage;
+	@Getter private static Stage addJudgeCoachStage;
 	@Getter private static BorderPane rootLayout;
 	@Getter private static RootViewController rootViewController = null;
 	
@@ -37,6 +38,7 @@ public class Main extends Application {
 			initAddPlayerStage();
 			initAddOrganisationStage();
 			initAddClubStage();
+			initAddJudgeCoachStage();
 		} catch(Exception e) {
 			logger.warn(e.getMessage());
 		}
@@ -85,6 +87,15 @@ public class Main extends Application {
 		addClubStage.setY(500);
 		Scene scene = new Scene(RootViewController.getAddClubView());
 		addClubStage.setScene(scene);
+	}
+	
+	public void initAddJudgeCoachStage() {
+		addJudgeCoachStage = new Stage();
+		addJudgeCoachStage.setTitle("Dodaj sędziego/trenera");
+		addJudgeCoachStage.setX(500);
+		addJudgeCoachStage.setY(500);
+		Scene scene = new Scene(RootViewController.getAddJudgeCoachView());
+		addJudgeCoachStage.setScene(scene);
 	}
 	
 	public static void main(String[] args) {

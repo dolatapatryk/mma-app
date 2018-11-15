@@ -8,6 +8,6 @@ public @Data class JudgeModel extends PersonModel {
 
 	@Override
 	public String toString() {
-		return this.getName() + " " + this.getSurname() + " - Sędzia";
+		return "Sędzia " + this.getName() + " " + this.getSurname();
 	}
 }

@@ -110,6 +110,6 @@ public class MainViewController {
 	
 	@FXML
 	private void handleAddJudgeCoachButton() {
-		
+		Main.getAddJudgeCoachStage().show();
 	}
 }

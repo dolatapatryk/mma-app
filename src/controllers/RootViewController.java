@@ -43,6 +43,8 @@ public class RootViewController {
 	
 	@Getter private static AnchorPane addClubView = null;
 	
+	@Getter private static AnchorPane addJudgeCoachView = null;
+	
 	@Getter private AnchorPane mainView = null;
 	@Getter private static MainViewController mainViewController = null;
 		
@@ -131,6 +133,18 @@ public class RootViewController {
 		}
 	}
 	
+	private void loadAddJudgeCoachView() {
+		FXMLLoader addJudgeCoachLoader = new FXMLLoader();
+		File addJudgeCoachFXML = new File(System.getProperty("user.dir") + 
+				"/resources/AddJudgeCoachView.fxml");
+		try {
+			addJudgeCoachLoader.setLocation(addJudgeCoachFXML.toURI().toURL());
+			addJudgeCoachView = (AnchorPane) addJudgeCoachLoader.load();
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+		}
+	}
+	
 	private void loadMainScene() {
 		FXMLLoader mainSceneLoader = new FXMLLoader();
 		File mainSceneViewFXML = new File(System.getProperty("user.dir") + 
@@ -155,6 +169,7 @@ public class RootViewController {
 		loadAddPlayerView();
 		loadAddOrganisationView();
 		loadAddClubView();
+		loadAddJudgeCoachView();
 	}
 	
 	@FXML
