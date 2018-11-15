@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="739.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OrganisationViewController">
+<AnchorPane prefHeight="739.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OrganisationViewController">
    <children>
       <Text fx:id="text" layoutX="507.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ekran organizacji" wrappingWidth="162.7294921875" />
-      <ListView fx:id="playerList" layoutX="77.0" layoutY="51.0" prefHeight="259.0" prefWidth="265.0" />
+      <ListView fx:id="playerList" layoutX="77.0" layoutY="68.0" prefHeight="259.0" prefWidth="265.0" />
       <Button fx:id="refreshButton" layoutX="1128.0" layoutY="648.0" mnemonicParsing="false" onAction="#handleRefreshButton" text="refresh" visible="false" />
       <Button fx:id="addPlayerButton" layoutX="92.0" layoutY="357.0" mnemonicParsing="false" onAction="#handleAddPlayerButton" text="Dodaj zawodnika" />
       <Text fx:id="organisationNameText" layoutX="1000.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" />
@@ -20,5 +21,15 @@
       <Label layoutX="902.0" layoutY="197.0" text="Miasto" />
       <Text fx:id="organisationAddressText" layoutX="1000.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <Text fx:id="organisationCityText" layoutX="1000.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Label fx:id="clubLabel" layoutX="360.0" layoutY="87.0" text="Klub" />
+      <Label fx:id="coachLabel" layoutX="361.0" layoutY="107.0" text="Trener" />
+      <Label fx:id="winsLabel" layoutX="360.0" layoutY="130.0" text="Wygrane" />
+      <Label fx:id="lossesLabel" layoutX="357.0" layoutY="155.0" text="Przegrane" />
+      <Label fx:id="drawsLabel" layoutX="359.0" layoutY="181.0" text="Remisy" />
+      <Label fx:id="standUpLabel" layoutX="362.0" layoutY="205.0" text="Stójka" />
+      <Label fx:id="grapplingLabel" layoutX="363.0" layoutY="228.0" text="Parter" />
+      <Label fx:id="wrestlingLabel" layoutX="359.0" layoutY="252.0" text="Zapasy" />
+      <Label fx:id="clinchLabel" layoutX="364.0" layoutY="276.0" text="Klincz" />
+      <ChoiceBox fx:id="weightClassChoiceBox" layoutX="77.0" layoutY="25.0" prefHeight="26.0" prefWidth="265.0" />
    </children>
 </AnchorPane>

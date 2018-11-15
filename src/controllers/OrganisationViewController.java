@@ -7,15 +7,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.Main;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import lombok.Getter;
 import models.OrganisationModel;
 import models.PlayerModel;
+import models.WeightClassModel;
 import repositories.OrganisationRepository;
 import repositories.PlayerRepository;
 
@@ -39,6 +44,14 @@ public class OrganisationViewController {
 	@Getter private Button refreshButton;
 	@FXML
 	private Button addPlayerButton;
+	@FXML
+	private ChoiceBox<WeightClassModel> weightClassChoiceBox = new ChoiceBox<>();
+	private ObservableList<WeightClassModel> weightClassItems;
+	
+	@FXML
+	private Label clubLabel;
+	@FXML 
+	private Label coachLabel;
 		
 	@FXML
 	private ListView<PlayerModel> playerList;
@@ -47,8 +60,16 @@ public class OrganisationViewController {
 	
 	@FXML
 	private void initialize() {
+		weightClassItems = FXCollections.observableArrayList();
 		playerItems = FXCollections.observableArrayList();
 		playerList.setItems(playerItems);
+		playerList.getSelectionModel().selectedItemProperty()
+        	.addListener(new ChangeListener<PlayerModel>() {
+        		public void changed(ObservableValue<? extends PlayerModel> observable,
+        				PlayerModel oldValue, PlayerModel newValue) {
+        			//TODO dokonczyc listener
+        		}
+        	});
 	}
 	
 	private void addPlayersToList() {
