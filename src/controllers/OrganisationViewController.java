@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,13 +17,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import lombok.Getter;
+import models.CoachModel;
 import models.OrganisationModel;
 import models.PlayerModel;
 import models.WeightClassModel;
 import repositories.OrganisationRepository;
+import repositories.PersonRepository;
 import repositories.PlayerRepository;
+import repositories.WeightClassRepository;
 
 public class OrganisationViewController {
 
@@ -30,8 +34,6 @@ public class OrganisationViewController {
 	
 	public static String organisation = "";
 	
-	@FXML 
-	@Getter private Text text;
 	@FXML
 	private Text organisationNameText;
 	@FXML
@@ -40,8 +42,8 @@ public class OrganisationViewController {
 	private Text organisationAddressText;
 	@FXML
 	private Text organisationCityText;
-	@FXML
-	@Getter private Button refreshButton;
+	//@FXML
+	//@Getter private Button refreshButton;
 	@FXML
 	private Button addPlayerButton;
 	@FXML
@@ -49,10 +51,36 @@ public class OrganisationViewController {
 	private ObservableList<WeightClassModel> weightClassItems;
 	
 	@FXML
-	private Label clubLabel;
-	@FXML 
-	private Label coachLabel;
-		
+	private TextField nameTextField;
+	@FXML
+	private TextField surnameTextField;
+	@FXML
+	private Text clubText;
+	@FXML
+	private Text coachText;	
+	@FXML
+	private Text winText;
+	@FXML
+	private Text lossText;	
+	@FXML
+	private Text drawText;
+	@FXML
+	private TextField standUpTextField;
+	@FXML
+	private TextField grapplingTextField;
+	@FXML
+	private TextField wrestlingTextField;
+	@FXML
+	private TextField clinchTextField;
+	@FXML
+	private Button updateButton;
+	@FXML
+	private Label idLabel;	
+	
+	ChangeListener<PlayerModel> playerItemListener;
+	ChangeListener<WeightClassModel> weightClassItemListener;
+
+	
 	@FXML
 	private ListView<PlayerModel> playerList;
 	
@@ -63,13 +91,27 @@ public class OrganisationViewController {
 		weightClassItems = FXCollections.observableArrayList();
 		playerItems = FXCollections.observableArrayList();
 		playerList.setItems(playerItems);
+		weightClassChoiceBox.setItems(weightClassItems);
+		playerItemListener = new ChangeListener<PlayerModel>() {
+			public void changed(ObservableValue<? extends PlayerModel> observable,
+    				PlayerModel oldValue, PlayerModel newValue) {
+    			handlePlayerItemSelected(newValue);
+    		}
+		};
 		playerList.getSelectionModel().selectedItemProperty()
-        	.addListener(new ChangeListener<PlayerModel>() {
-        		public void changed(ObservableValue<? extends PlayerModel> observable,
-        				PlayerModel oldValue, PlayerModel newValue) {
-        			//TODO dokonczyc listener
-        		}
-        	});
+    		.addListener(playerItemListener);
+		
+		weightClassItemListener = new ChangeListener<WeightClassModel>() {
+				@Override
+				public void changed(ObservableValue<? extends WeightClassModel> observable, WeightClassModel oldValue,
+						WeightClassModel newValue) {
+					addPlayersByWeightClass(newValue);
+				}	
+			};
+		weightClassChoiceBox.getSelectionModel().selectedItemProperty()
+			.addListener(weightClassItemListener);
+		
+		refresh();
 	}
 	
 	private void addPlayersToList() {
@@ -78,8 +120,28 @@ public class OrganisationViewController {
 		playerItems.addAll(players);
 	}
 	
-	@FXML
-	private void handleRefreshButton() {
+	public void addWeightClassesToList() {
+		weightClassItems.clear();
+		List<WeightClassModel> weightClasses = WeightClassRepository.getWeightClasses();
+		weightClassItems.addAll(weightClasses);
+	}
+	
+	private void addPlayersByWeightClass(WeightClassModel weightClass) {
+		clearListenerPlayerListItemSelected();
+		playerItems.clear();
+		List<PlayerModel> players = new ArrayList<>();	
+		if(weightClass == null)
+			players = PlayerRepository.getPlayersByOrganisation(organisation);
+		else
+			players = PlayerRepository.getPlayersByWeightClass(weightClass.getName());
+		playerItems.addAll(players);
+		addListenerPlayerListItemSelected();
+	}
+	
+	
+	public void refresh() {
+		clearListenerPlayerListItemSelected();
+		clearListenerWeightClassItemSelected();
 		Optional<OrganisationModel> organisationModel = OrganisationRepository.get(organisation);
 		if(organisationModel.isPresent()) {
 			organisationNameText.setText(organisationModel.get().getName());
@@ -87,12 +149,90 @@ public class OrganisationViewController {
 			organisationAddressText.setText(organisationModel.get().getAddress());
 			organisationCityText.setText(organisationModel.get().getCity());
 		}
+		clearPlayerInfo();
 		addPlayersToList();
+		addWeightClassesToList();
+		addListenerPlayerListItemSelected();
+		addListenerWeightClassItemSelected();
 	}
 	
 	@FXML
 	private void handleAddPlayerButton() {
 		Main.getAddPlayerStage().show();
+	}
+	
+	private void handlePlayerItemSelected(PlayerModel player) {
+		idLabel.setText(String.valueOf(player.getId()));
+		nameTextField.setText(player.getName());
+		surnameTextField.setText(player.getSurname());
+		clubText.setText(player.getClub());
+		CoachModel coach = PersonRepository.getCoach(player.getCoach()).get();
+		coachText.setText(coach.toString());
+		winText.setText(String.valueOf(player.getWins()));
+		lossText.setText(String.valueOf(player.getLosses()));
+		drawText.setText(String.valueOf(player.getDraws()));
+		standUpTextField.setText(String.valueOf(player.getStandUp()));
+		grapplingTextField.setText(String.valueOf(player.getGrappling()));
+		wrestlingTextField.setText(String.valueOf(player.getWrestling()));
+		clinchTextField.setText(String.valueOf(player.getClinch()));
+	}
+	
+	@FXML
+	private void handleUpdateButton() {
+		PlayerModel player = new PlayerModel();
+		player.setName(nameTextField.getText());
+		player.setSurname(surnameTextField.getText());
+		try {
+			player.setId(Integer.valueOf(idLabel.getText()));
+			player.setStandUp(Integer.valueOf(standUpTextField.getText()));
+			player.setGrappling(Integer.valueOf(grapplingTextField.getText()));
+			player.setWrestling(Integer.valueOf(wrestlingTextField.getText()));
+			player.setClinch(Integer.valueOf(clinchTextField.getText()));
+		} catch (NumberFormatException e) {
+			logger.info(e.getMessage());
+		}
+		
+		
+		
+		PlayerRepository.update(player);
+		refresh();
+		
+		logger.info("Zaktualizowano playera o id {}", player.getId());
+	}
+	
+	private void clearPlayerInfo() {
+		idLabel.setText("");
+		nameTextField.setText("");
+		surnameTextField.setText("");
+		clubText.setText("");
+		coachText.setText("");
+		winText.setText("");
+		lossText.setText("");
+		drawText.setText("");
+		standUpTextField.setText("");
+		grapplingTextField.setText("");
+		wrestlingTextField.setText("");
+		clinchTextField.setText("");
+	}
+	
+	private void clearListenerPlayerListItemSelected() {
+		playerList.getSelectionModel().selectedItemProperty()
+			.removeListener(playerItemListener);
+	}
+	
+	private void addListenerPlayerListItemSelected() {
+		playerList.getSelectionModel().selectedItemProperty()
+			.addListener(playerItemListener);
+	}
+	
+	private void clearListenerWeightClassItemSelected() {
+		weightClassChoiceBox.getSelectionModel().selectedItemProperty()
+			.removeListener(weightClassItemListener);
+	}
+	
+	private void addListenerWeightClassItemSelected() {
+		weightClassChoiceBox.getSelectionModel().selectedItemProperty()
+			.addListener(weightClassItemListener);
 	}
 	
 }

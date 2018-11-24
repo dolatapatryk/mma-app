@@ -16,6 +16,10 @@
               </items>
             </Menu>
             <Menu fx:id="organisationMenu" mnemonicParsing="false" text="Organizacje" />
+            <Menu fx:id="eventMenu" mnemonicParsing="false" text="Gala">
+               <items>
+                  <MenuItem fx:id="eventMenuItem" mnemonicParsing="false" onAction="#handleEventMenu" text="Organizuj" />
+               </items></Menu>
          </menus>
       </MenuBar>
    </top>

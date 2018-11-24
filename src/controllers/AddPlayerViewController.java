@@ -118,7 +118,7 @@ public class AddPlayerViewController {
 		
 		reset();
 		Main.getAddPlayerStage().close();
-		RootViewController.getOrganisationViewController().getRefreshButton().fire();
+		RootViewController.getOrganisationViewController().refresh();
 		RootViewController.getMainViewController().addPlayersToList();
 	}
 	

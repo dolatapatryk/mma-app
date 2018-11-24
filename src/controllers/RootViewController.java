@@ -33,8 +33,14 @@ public class RootViewController {
 	@FXML 
 	private MenuItem mainSceneMenuItem;
 	
+	@FXML
+	private MenuItem eventMenuItem;
+	
 	private static AnchorPane organisationView = null;
 	@Getter private static OrganisationViewController organisationViewController = null;
+	
+	private AnchorPane eventView = null;
+	private EventViewController eventViewController = null;
 	
 	@Getter private static AnchorPane addPlayerView = null;
 	@Getter private static AddPlayerViewController addPlayerViewController = null;
@@ -59,8 +65,7 @@ public class RootViewController {
 	private void setOrganisationView(String organisation) {
 		OrganisationViewController.organisation = organisation;
 		Main.getRootLayout().setCenter(organisationView);
-		organisationViewController.getText().setText("ekran organizacji: " + organisation);
-		organisationViewController.getRefreshButton().fire();
+		organisationViewController.refresh();
 		logger.info("przelaczono na widok organizacji: " + organisation);
 		logger.info(organisation);
 	}
@@ -93,6 +98,19 @@ public class RootViewController {
 			organisationViewController = organisationLoader.getController();
 		} catch (Exception e) {
 			logger.warn(e.getMessage());
+		}
+	}
+	
+	private void loadEventView() {
+		FXMLLoader eventLoader = new FXMLLoader();
+		File eventViewFXML = new File(System.getProperty("user.dir") +
+				"/resources/EventView.fxml");
+		try {
+			eventLoader.setLocation(eventViewFXML.toURI().toURL());
+			eventView = (AnchorPane) eventLoader.load();
+			eventViewController = eventLoader.getController();
+		} catch (Exception e) {
+			logger.info(e.getMessage());
 		}
 	}
 	
@@ -166,6 +184,7 @@ public class RootViewController {
 	private void loadOtherViews() {
 		loadMainScene();
 		loadOrganisationView();
+		loadEventView();
 		loadAddPlayerView();
 		loadAddOrganisationView();
 		loadAddClubView();
@@ -177,5 +196,12 @@ public class RootViewController {
 		Main.getRootLayout().setCenter(this.mainView);
 		logger.info("przelaczono do ekranu glownego");
 	}
+	
+	@FXML
+	private void handleEventMenu() {
+		Main.getRootLayout().setCenter(this.eventView);
+		logger.info("przelaczono do ekranu organizowania gali");
+	}
+	
 	
 }
