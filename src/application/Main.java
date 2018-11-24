@@ -2,6 +2,7 @@ package application;
 	
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import lombok.Getter;
+import models.EventModel;
+import repositories.EventRepository;
 import utils.Db;
 
 
@@ -24,6 +27,7 @@ public class Main extends Application {
 	@Getter private static Stage addOrganisationStage;
 	@Getter private static Stage addClubStage;
 	@Getter private static Stage addJudgeCoachStage;
+	@Getter private static Stage addEventStage;
 	@Getter private static BorderPane rootLayout;
 	@Getter private static RootViewController rootViewController = null;
 	
@@ -33,15 +37,16 @@ public class Main extends Application {
 		try {
 			this.primaryStage = primaryStage;
 			this.primaryStage.setTitle("MMA");
-			
 			initRootLayout();
 			initAddPlayerStage();
 			initAddOrganisationStage();
 			initAddClubStage();
 			initAddJudgeCoachStage();
+			initAddEventStage();
 		} catch(Exception e) {
 			logger.warn(e.getMessage());
 		}
+
 	}
 	
 	public void initRootLayout() {
@@ -96,6 +101,15 @@ public class Main extends Application {
 		addJudgeCoachStage.setY(500);
 		Scene scene = new Scene(RootViewController.getAddJudgeCoachView());
 		addJudgeCoachStage.setScene(scene);
+	}
+	
+	public void initAddEventStage() {
+		addEventStage = new Stage();
+		addEventStage.setTitle("Stwórz galę");
+		addEventStage.setX(500);
+		addEventStage.setY(500);
+		Scene scene = new Scene(RootViewController.getAddEventView());
+		addEventStage.setScene(scene);
 	}
 	
 	public static void main(String[] args) {

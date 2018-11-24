@@ -14,7 +14,9 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import lombok.Getter;
+import models.EventModel;
 import models.OrganisationModel;
+import repositories.EventRepository;
 import repositories.OrganisationRepository;
 
 public class RootViewController {
@@ -23,6 +25,8 @@ public class RootViewController {
 	
 	@FXML
 	@Getter private Menu organisationMenu;
+	@FXML
+	private Menu eventMenu;
 	
 	@FXML 
 	private Menu actionMenu;
@@ -34,7 +38,7 @@ public class RootViewController {
 	private MenuItem mainSceneMenuItem;
 	
 	@FXML
-	private MenuItem eventMenuItem;
+	private MenuItem addEventMenuItem;
 	
 	private static AnchorPane organisationView = null;
 	@Getter private static OrganisationViewController organisationViewController = null;
@@ -51,6 +55,8 @@ public class RootViewController {
 	
 	@Getter private static AnchorPane addJudgeCoachView = null;
 	
+	@Getter private static AnchorPane addEventView = null;
+	
 	@Getter private AnchorPane mainView = null;
 	@Getter private static MainViewController mainViewController = null;
 		
@@ -60,6 +66,7 @@ public class RootViewController {
 		loadOtherViews();
 				
 		loadOrganisationsToMenu();
+		loadEventsToMenu();
 	}
 	
 	private void setOrganisationView(String organisation) {
@@ -68,6 +75,13 @@ public class RootViewController {
 		organisationViewController.refresh();
 		logger.info("przelaczono na widok organizacji: " + organisation);
 		logger.info(organisation);
+	}
+	
+	private void setEventView(String event) {
+		EventViewController.event = event;
+		Main.getRootLayout().setCenter(eventView);
+		
+		logger.info("przelaczono na widok gali: " + event);
 	}
 	
 	public void loadOrganisationsToMenu() {
@@ -83,9 +97,27 @@ public class RootViewController {
 		setOnActionsToOrganisationMenu();
 	}
 	
+	public void loadEventsToMenu() {
+		List<EventModel> events = EventRepository.getActiveEvents();
+		eventMenu.getItems().clear();
+
+		events.stream().map(e -> e.getName()).collect(Collectors.toList())
+			.forEach(e -> {
+				MenuItem menuItem = new MenuItem(e);
+				eventMenu.getItems().add(menuItem);
+			});
+		
+		setOnActionsToEventMenu();
+	}
+	
 	private void setOnActionsToOrganisationMenu() {
 		organisationMenu.getItems().forEach(item -> item
 				.setOnAction(i -> setOrganisationView(item.getText())));
+	}
+	
+	private void setOnActionsToEventMenu() {
+		eventMenu.getItems().forEach(item -> item
+				.setOnAction(i -> setEventView(item.getText())));
 	}
 	
 	private void loadOrganisationView() {
@@ -163,6 +195,18 @@ public class RootViewController {
 		}
 	}
 	
+	private void loadAddEventView() {
+		FXMLLoader addEventLoader = new FXMLLoader();
+		File addEventFXML = new File(System.getProperty("user.dir") + 
+				"/resources/AddEventView.fxml");
+		try {
+			addEventLoader.setLocation(addEventFXML.toURI().toURL());
+			addEventView = (AnchorPane) addEventLoader.load();
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+		}
+	}
+	
 	private void loadMainScene() {
 		FXMLLoader mainSceneLoader = new FXMLLoader();
 		File mainSceneViewFXML = new File(System.getProperty("user.dir") + 
@@ -189,6 +233,7 @@ public class RootViewController {
 		loadAddOrganisationView();
 		loadAddClubView();
 		loadAddJudgeCoachView();
+		loadAddEventView();
 	}
 	
 	@FXML
@@ -198,9 +243,8 @@ public class RootViewController {
 	}
 	
 	@FXML
-	private void handleEventMenu() {
-		Main.getRootLayout().setCenter(this.eventView);
-		logger.info("przelaczono do ekranu organizowania gali");
+	private void handleAddEventMenuItem() {
+		Main.getAddEventStage().show();
 	}
 	
 	

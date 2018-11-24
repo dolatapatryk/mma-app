@@ -13,13 +13,11 @@
               <items>
                   <MenuItem fx:id="mainSceneMenuItem" mnemonicParsing="false" onAction="#setMainScene" text="Ekran główny" />
                 <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#closeApp" text="Zakończ" />
+                  <MenuItem fx:id="addEventMenuItem" mnemonicParsing="false" onAction="#handleAddEventMenuItem" text="Stwórz galę" />
               </items>
             </Menu>
             <Menu fx:id="organisationMenu" mnemonicParsing="false" text="Organizacje" />
-            <Menu fx:id="eventMenu" mnemonicParsing="false" text="Gala">
-               <items>
-                  <MenuItem fx:id="eventMenuItem" mnemonicParsing="false" onAction="#handleEventMenu" text="Organizuj" />
-               </items></Menu>
+            <Menu fx:id="eventMenu" mnemonicParsing="false" text="Gala" />
          </menus>
       </MenuBar>
    </top>
