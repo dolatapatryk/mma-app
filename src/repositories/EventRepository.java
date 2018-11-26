@@ -5,13 +5,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import mappers.EventMapper;
 import models.EventModel;
+import models.PlayerModel;
 import utils.Db;
 
 public class EventRepository {
@@ -47,6 +52,22 @@ public class EventRepository {
 		String sql = "SELECT * FROM events WHERE active = 1";
 		
 		return Db.getJdbcTemplate().query(sql, mapper);
+	}
+	
+	public static List<EventModel> getEventsByNames(List<String> names) {
+		if(names.isEmpty())
+			return new ArrayList<>();
+		
+		String sql = "SELECT * FROM events WHERE name in (:names)";
+		
+		return Db.getNamedParameterJdbcTemplate().query(sql, new MapSqlParameterSource("names", names), 
+				mapper);
+	}
+	
+	public static Optional<EventModel> get(String name) {
+		List<EventModel> events = getEventsByNames(Arrays.asList(name));
+		
+		return events.isEmpty() ? Optional.empty() : Optional.ofNullable(events.get(0));
 	}
 
 }

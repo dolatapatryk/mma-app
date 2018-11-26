@@ -62,6 +62,12 @@ public class PlayerRepository {
 		return Db.getJdbcTemplate().query(sql, new Object[] {weightClass}, playerMapper);
 	}
 	
+	public static List<PlayerModel> getPlayersByOrganisationAndWeightClass(String organisation, String weightClass) {
+		String sql = "SELECT * FROM players WHERE organisation = ? AND weight_class = ?";
+		
+		return Db.getJdbcTemplate().query(sql, new Object[] {organisation, weightClass}, playerMapper);
+	}
+	
 	public static void create(PlayerModel player) {
 		String sql = "INSERT INTO players(name, surname, club, organisation, weight_class, "
 				+ "stand_up, grappling, wrestling, clinch, coach) values(?, ?, ?, ?, ?, ?, ?, "

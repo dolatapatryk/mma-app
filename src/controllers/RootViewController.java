@@ -78,8 +78,9 @@ public class RootViewController {
 	}
 	
 	private void setEventView(String event) {
-		EventViewController.event = event;
+		EventViewController.eventName = event;
 		Main.getRootLayout().setCenter(eventView);
+		eventViewController.refresh();
 		
 		logger.info("przelaczono na widok gali: " + event);
 	}

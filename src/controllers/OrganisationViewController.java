@@ -133,7 +133,7 @@ public class OrganisationViewController {
 		if(weightClass == null)
 			players = PlayerRepository.getPlayersByOrganisation(organisation);
 		else
-			players = PlayerRepository.getPlayersByWeightClass(weightClass.getName());
+			players = PlayerRepository.getPlayersByOrganisationAndWeightClass(organisation, weightClass.getName());
 		playerItems.addAll(players);
 		addListenerPlayerListItemSelected();
 	}
