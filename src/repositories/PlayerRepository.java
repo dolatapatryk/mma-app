@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import mappers.PlayerMapper;
+import models.FightModel;
 import models.PlayerModel;
 import utils.Db;
 
@@ -110,6 +111,14 @@ public class PlayerRepository {
 		Object[] params = {player.getName(), player.getSurname(), player.getStandUp(), player.getGrappling(),
 				player.getWrestling(), player.getClinch(), player.getId()
 		};
+		
+		Db.getJdbcTemplate().update(sql, params);
+	}
+	
+	public static void updateScore(FightModel fight) {
+		String sql = "CALL update_score(?, ?, ?)";
+		
+		Object[] params = {fight.getPlayer1(), fight.getPlayer2(), fight.getWinner()};
 		
 		Db.getJdbcTemplate().update(sql, params);
 	}

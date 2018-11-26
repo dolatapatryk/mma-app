@@ -1,7 +1,9 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +19,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import models.ChampionModel;
 import models.EventModel;
 import models.FightModel;
 import models.JudgeModel;
 import models.PlayerModel;
 import models.WeightClassModel;
+import repositories.ChampionRepository;
 import repositories.EventRepository;
 import repositories.FightRepository;
 import repositories.PersonRepository;
@@ -65,6 +69,11 @@ public class EventViewController {
 	private Text winnerText;
 	@FXML
 	private Text judgeText;
+	@FXML
+	private ChoiceBox<String> fightModeChoiceBox = new ChoiceBox<>();
+	private ObservableList<String> fightModeItems;
+	@FXML
+	private Label player1Label;
 	
 	@FXML
 	private void initialize() {
@@ -72,10 +81,14 @@ public class EventViewController {
 		playerItems = FXCollections.observableArrayList();
 		judgeItems = FXCollections.observableArrayList();
 		fightItems = FXCollections.observableArrayList();
+		fightModeItems = FXCollections.observableArrayList();
 		playerListView.setItems(playerItems);
 		weightClassChoiceBox.setItems(weightClassItems);
 		judgeChoiceBox.setItems(judgeItems);
 		fightListView.setItems(fightItems);
+		fightModeChoiceBox.setItems(fightModeItems);
+		fightModeItems.addAll(Arrays.asList("Walka", "Walka mistrzowska"));
+		fightModeChoiceBox.getSelectionModel().selectFirst();
 		addWeightClassesToList();
 		addJudgesToList();
 		
@@ -101,6 +114,15 @@ public class EventViewController {
 				@Override
 				public void changed(ObservableValue<? extends FightModel> arg0, FightModel arg1, FightModel arg2) {
 					displayFightInfo(arg2);
+				}
+			});
+		
+		fightModeChoiceBox.getSelectionModel().selectedItemProperty()
+			.addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+					if(arg2.equals("Walka mistrzowska"))
+						addChampionToLabel();
 				}
 			});
 	}
@@ -166,6 +188,17 @@ public class EventViewController {
 		FightRepository.create(fight);
 		logger.info("zakonczono walke");
 		
+		PlayerRepository.updateScore(fight);
+		
+		if(winner == 2 && fightModeChoiceBox.getValue().equals("Walka mistrzowska")) {
+			ChampionModel champ = new ChampionModel();
+			champ.setPlayer(player2.getId());
+			champ.setOrganisation(event.getOrganisation());
+			champ.setWeightClass(weightClassChoiceBox.getValue().getName());
+			
+			ChampionRepository.updateChamp(champ);
+		}
+		
 		player1TextField.clear();
 		player2TextField.clear();
 		
@@ -211,6 +244,18 @@ public class EventViewController {
 			JudgeModel judge = new JudgeModel();
 			judge = PersonRepository.getJudge(fight.getJudge()).get();
 			judgeText.setText(judge.toString());
+		}
+	}
+	
+	private void addChampionToLabel() {
+		String organisation = event.getOrganisation();
+		String weightClass = weightClassChoiceBox.getValue().getName();
+		
+		Optional<ChampionModel> champOpt = ChampionRepository.get(organisation, weightClass);
+		if(champOpt.isPresent()) {
+			player1 = PlayerRepository.get(champOpt.get().getPlayer()).get();
+			player1TextField.setText(player1.toString());
+			player1Label.setText("Mistrz");
 		}
 	}
 }
