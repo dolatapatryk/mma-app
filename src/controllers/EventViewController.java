@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import application.Main;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -74,6 +75,8 @@ public class EventViewController {
 	private ObservableList<String> fightModeItems;
 	@FXML
 	private Label player1Label;
+	@FXML
+	private Button endEventButton;
 	
 	@FXML
 	private void initialize() {
@@ -257,5 +260,12 @@ public class EventViewController {
 			player1TextField.setText(player1.toString());
 			player1Label.setText("Mistrz");
 		}
+	}
+	
+	@FXML
+	private void handleEndEventButton() {
+		EventRepository.endEvent(event.getId());
+		Main.getRootLayout().setCenter(Main.getRootViewController().getMainView());
+		Main.getRootViewController().loadEventsToMenu();
 	}
 }

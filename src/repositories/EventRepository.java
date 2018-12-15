@@ -69,5 +69,11 @@ public class EventRepository {
 		
 		return events.isEmpty() ? Optional.empty() : Optional.ofNullable(events.get(0));
 	}
+	
+	public static void endEvent(int eventId) {
+		String sql = "UPDATE events SET active = 0 WHERE id = ?";
+		
+		Db.getJdbcTemplate().update(sql, new Object[] {eventId});
+	}
 
 }

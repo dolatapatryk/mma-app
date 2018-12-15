@@ -25,5 +25,6 @@
       <Text fx:id="winnerText" layoutX="859.0" layoutY="503.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <Text fx:id="judgeText" layoutX="859.0" layoutY="543.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <ChoiceBox fx:id="fightModeChoiceBox" layoutX="496.0" layoutY="82.0" prefHeight="26.0" prefWidth="171.0" />
+      <Button fx:id="endEventButton" layoutX="16.0" layoutY="692.0" mnemonicParsing="false" onAction="#handleEndEventButton" text="Zakończ gale" />
    </children>
 </AnchorPane>

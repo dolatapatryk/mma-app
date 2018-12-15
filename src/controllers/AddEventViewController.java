@@ -65,6 +65,7 @@ public class AddEventViewController {
 		EventRepository.create(event);
 		reset();
 		Main.getAddEventStage().close();
+		Main.getRootViewController().loadEventsToMenu();
 	}
 	
 	private void reset() {
