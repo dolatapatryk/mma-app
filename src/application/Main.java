@@ -28,6 +28,8 @@ public class Main extends Application {
 	@Getter private static Stage addClubStage;
 	@Getter private static Stage addJudgeCoachStage;
 	@Getter private static Stage addEventStage;
+	@Getter private static Stage addSponsorStage;
+	@Getter private static Stage addContractStage;
 	@Getter private static BorderPane rootLayout;
 	@Getter private static RootViewController rootViewController = null;
 	
@@ -43,6 +45,8 @@ public class Main extends Application {
 			initAddClubStage();
 			initAddJudgeCoachStage();
 			initAddEventStage();
+			initAddSponsorStage();
+			initAddContractStage();
 		} catch(Exception e) {
 			logger.warn(e.getMessage());
 		}
@@ -110,6 +114,24 @@ public class Main extends Application {
 		addEventStage.setY(500);
 		Scene scene = new Scene(RootViewController.getAddEventView());
 		addEventStage.setScene(scene);
+	}
+	
+	public void initAddSponsorStage() {
+		addSponsorStage = new Stage();
+		addSponsorStage.setTitle("Stwórz sponsora");
+		addSponsorStage.setX(500);
+		addSponsorStage.setY(500);
+		Scene scene = new Scene(RootViewController.getAddSponsorView());
+		addSponsorStage.setScene(scene);
+	}
+	
+	public void initAddContractStage() {
+		addContractStage = new Stage();
+		addContractStage.setTitle("Stwórz kontrakt");
+		addContractStage.setX(500);
+		addContractStage.setY(500);
+		Scene scene = new Scene(RootViewController.getAddContractView());
+		addContractStage.setScene(scene);
 	}
 	
 	public static void main(String[] args) {

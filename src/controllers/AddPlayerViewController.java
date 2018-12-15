@@ -120,6 +120,7 @@ public class AddPlayerViewController {
 		Main.getAddPlayerStage().close();
 		RootViewController.getOrganisationViewController().refresh();
 		RootViewController.getMainViewController().addPlayersToList();
+		RootViewController.getAddContractViewController().addPlayersToList();
 	}
 	
 	public void addClubsToList() {

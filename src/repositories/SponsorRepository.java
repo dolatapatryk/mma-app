@@ -1,6 +1,7 @@
 package repositories;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
@@ -28,6 +29,13 @@ public class SponsorRepository {
 		} catch (SQLException e) {
 			System.out.println(e.getCause());
 		}
+	}
+	
+	public static List<SponsorModel> getSponsorsByPlayerContracts(int playerId) {
+		String sql = "SELECT DISTINCT s.name FROM sponsors s JOIN contracts c ON s.name = c.sponsor "
+				+ "WHERE c.player = ? AND c.date_to >= ?";
+		
+		return Db.getJdbcTemplate().query(sql, new Object[] {playerId, new Date(System.currentTimeMillis())}, mapper);
 	}
 	
 }

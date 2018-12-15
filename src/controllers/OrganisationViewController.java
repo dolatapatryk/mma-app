@@ -1,8 +1,11 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +25,12 @@ import javafx.scene.text.Text;
 import models.CoachModel;
 import models.OrganisationModel;
 import models.PlayerModel;
+import models.SponsorModel;
 import models.WeightClassModel;
 import repositories.OrganisationRepository;
 import repositories.PersonRepository;
 import repositories.PlayerRepository;
+import repositories.SponsorRepository;
 import repositories.WeightClassRepository;
 
 public class OrganisationViewController {
@@ -76,6 +81,10 @@ public class OrganisationViewController {
 	private Button updateButton;
 	@FXML
 	private Label idLabel;	
+	@FXML
+	private Text sponsorText;
+	@FXML
+	private Text paymentText;
 	
 	ChangeListener<PlayerModel> playerItemListener;
 	ChangeListener<WeightClassModel> weightClassItemListener;
@@ -162,6 +171,7 @@ public class OrganisationViewController {
 	}
 	
 	private void handlePlayerItemSelected(PlayerModel player) {
+		clearPlayerInfo();
 		idLabel.setText(String.valueOf(player.getId()));
 		nameTextField.setText(player.getName());
 		surnameTextField.setText(player.getSurname());
@@ -175,6 +185,18 @@ public class OrganisationViewController {
 		grapplingTextField.setText(String.valueOf(player.getGrappling()));
 		wrestlingTextField.setText(String.valueOf(player.getWrestling()));
 		clinchTextField.setText(String.valueOf(player.getClinch()));
+		List<SponsorModel> sponsors = SponsorRepository.getSponsorsByPlayerContracts(player.getId());
+		String txt = "";
+		for(int i = 0; i < sponsors.size(); i++) {
+			if(i == sponsors.size() - 1)
+				txt = txt + sponsors.get(i);
+			else
+				txt = txt + sponsors.get(i) + ", ";
+		}
+		sponsorText.setText(txt);
+		paymentText.setText("0");
+		if(!sponsors.isEmpty())
+			paymentText.setText(String.format("%.2f zł/msc", PlayerRepository.calculatePayment(player.getId())));
 	}
 	
 	@FXML
@@ -213,6 +235,8 @@ public class OrganisationViewController {
 		grapplingTextField.setText("");
 		wrestlingTextField.setText("");
 		clinchTextField.setText("");
+		sponsorText.setText("");
+		paymentText.setText("");
 	}
 	
 	private void clearListenerPlayerListItemSelected() {

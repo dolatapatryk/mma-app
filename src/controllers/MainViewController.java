@@ -132,11 +132,11 @@ public class MainViewController {
 	
 	@FXML
 	private void handleAddSponsorButton() {
-		
+		Main.getAddSponsorStage().show();
 	}
 	
 	@FXML
 	private void handleAddContractButton() {
-		
+		Main.getAddContractStage().show();
 	}
 }

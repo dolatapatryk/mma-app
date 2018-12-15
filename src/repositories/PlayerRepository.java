@@ -122,4 +122,10 @@ public class PlayerRepository {
 		
 		Db.getJdbcTemplate().update(sql, params);
 	}
+	
+	public static double calculatePayment(int playerId) {
+		String sql = "SELECT calculate_payment(?)";
+		
+		return (double) Db.getJdbcTemplate().queryForObject(sql, new Object[] {playerId}, Double.class);
+	}
 }

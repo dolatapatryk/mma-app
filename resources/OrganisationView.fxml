@@ -43,8 +43,12 @@
       <TextField fx:id="grapplingTextField" layoutX="434.0" layoutY="260.0" />
       <TextField fx:id="wrestlingTextField" layoutX="434.0" layoutY="284.0" />
       <TextField fx:id="clinchTextField" layoutX="434.0" layoutY="306.0" />
-      <Button fx:id="updateButton" layoutX="356.0" layoutY="332.0" mnemonicParsing="false" onAction="#handleUpdateButton" text="Aktualizuj" />
+      <Button fx:id="updateButton" layoutX="342.0" layoutY="392.0" mnemonicParsing="false" onAction="#handleUpdateButton" text="Aktualizuj" />
       <Label layoutX="349.0" layoutY="38.0" text="ID" />
       <Label fx:id="idLabel" layoutX="438.0" layoutY="38.0" />
+      <Label layoutX="349.0" layoutY="341.0" text="Sponsorzy" />
+      <Label layoutX="349.0" layoutY="362.0" text="Zarobki" />
+      <Text fx:id="sponsorText" layoutX="435.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Text fx:id="paymentText" layoutX="435.0" layoutY="375.0" strokeType="OUTSIDE" strokeWidth="0.0" />
    </children>
 </AnchorPane>

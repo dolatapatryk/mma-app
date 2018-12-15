@@ -14,7 +14,7 @@ public class ContractRepository {
 	static ContractMapper mapper = new ContractMapper();
 	
 	public static List<ContractModel> getByPlayer(int playerId) {
-		String sql = "SELECT * FROM contracts WHERE player = ? and dateTo <= ?";
+		String sql = "SELECT * FROM contracts WHERE player = ? and dateTo >= ?";
 		
 		return Db.getJdbcTemplate().query(sql, new Object[] {playerId, new Date(System.currentTimeMillis())}, mapper);
 	}

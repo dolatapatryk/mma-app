@@ -57,6 +57,11 @@ public class RootViewController {
 	
 	@Getter private static AnchorPane addEventView = null;
 	
+	@Getter private static AnchorPane addSponsorView = null;
+	
+	@Getter private static AnchorPane addContractView = null;
+	@Getter private static AddContractViewController addContractViewController = null;
+	
 	@Getter private AnchorPane mainView = null;
 	@Getter private static MainViewController mainViewController = null;
 		
@@ -208,6 +213,33 @@ public class RootViewController {
 		}
 	}
 	
+	private void loadAddSponsorView() {
+		FXMLLoader addSponsorLoader = new FXMLLoader();
+		File addSponsorFXML = new File(System.getProperty("user.dir") +
+				"/resources/AddSponsorView.fxml");
+		
+		try {
+			addSponsorLoader.setLocation(addSponsorFXML.toURI().toURL());
+			addSponsorView = (AnchorPane) addSponsorLoader.load();
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+		}
+	}
+	
+	private void loadAddContractView() {
+		FXMLLoader addContractLoader = new FXMLLoader();
+		File addContractFXML = new File(System.getProperty("user.dir") +
+				"/resources/AddContractView.fxml");
+		
+		try {
+			addContractLoader.setLocation(addContractFXML.toURI().toURL());
+			addContractView = (AnchorPane) addContractLoader.load();
+			addContractViewController = addContractLoader.getController();
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+		}
+	}
+	
 	private void loadMainScene() {
 		FXMLLoader mainSceneLoader = new FXMLLoader();
 		File mainSceneViewFXML = new File(System.getProperty("user.dir") + 
@@ -235,6 +267,8 @@ public class RootViewController {
 		loadAddClubView();
 		loadAddJudgeCoachView();
 		loadAddEventView();
+		loadAddSponsorView();
+		loadAddContractView();
 	}
 	
 	@FXML
