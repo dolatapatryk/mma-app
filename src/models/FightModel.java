@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Optional;
+
 import lombok.Data;
 import repositories.PlayerRepository;
 
@@ -13,11 +15,19 @@ public @Data class FightModel {
 	
 	@Override
 	public String toString() {
-		PlayerModel player1Model = PlayerRepository.get(player1).get();
-		PlayerModel player2Model = PlayerRepository.get(player2).get();
+		Optional<PlayerModel> player1Opt = PlayerRepository.get(player1);
+		Optional<PlayerModel> player2Opt = PlayerRepository.get(player2);
+		String text = "";
+		if(player1Opt.isPresent())
+			text = text + player1Opt.get().toString() + " vs ";
+		else
+			text = text + "(Nie znaleziono gracza 1) vs ";
 		
-		String text = player1Model.toString() + " vs " + player2Model.toString();
-		
+		if(player2Opt.isPresent())
+			text = text + player2Opt.get().toString();
+		else
+			text = text + "(Nie znaleziono gracza 2)";
+				
 		return text;
 	}
 }

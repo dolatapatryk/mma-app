@@ -44,7 +44,7 @@ public class RootViewController {
 	@Getter private static OrganisationViewController organisationViewController = null;
 	
 	private AnchorPane eventView = null;
-	private EventViewController eventViewController = null;
+	private static  @Getter EventViewController eventViewController = null;
 	
 	@Getter private static AnchorPane addPlayerView = null;
 	@Getter private static AddPlayerViewController addPlayerViewController = null;

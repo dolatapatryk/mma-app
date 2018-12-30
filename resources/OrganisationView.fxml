@@ -34,8 +34,6 @@
       <Label fx:id="surnameLabel" layoutX="349.0" layoutY="87.0" text="Nazwisko" />
       <TextField fx:id="nameTextField" layoutX="434.0" layoutY="55.0" />
       <TextField fx:id="surnameTextField" layoutX="434.0" layoutY="82.0" />
-      <Text fx:id="clubText" layoutX="434.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-      <Text fx:id="coachText" layoutX="434.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <Text fx:id="winText" layoutX="434.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <Text fx:id="lossText" layoutX="434.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <Text fx:id="drawText" layoutX="434.0" layoutY="226.0" strokeType="OUTSIDE" strokeWidth="0.0" />
@@ -50,5 +48,7 @@
       <Label layoutX="349.0" layoutY="362.0" text="Zarobki" />
       <Text fx:id="sponsorText" layoutX="435.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <Text fx:id="paymentText" layoutX="435.0" layoutY="375.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <ChoiceBox fx:id="clubChoiceBox" layoutX="434.0" layoutY="109.0" prefHeight="26.0" prefWidth="171.0" />
+      <ChoiceBox fx:id="coachChoiceBox" layoutX="434.0" layoutY="135.0" prefHeight="26.0" prefWidth="171.0" />
    </children>
 </AnchorPane>

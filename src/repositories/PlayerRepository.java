@@ -105,11 +105,12 @@ public class PlayerRepository {
 	}
 	
 	public static void update(PlayerModel player) {
-		String sql = "UPDATE players SET name = ?, surname = ?, stand_up = ?, grappling = ?, wrestling = ?, clinch = ? "
+		String sql = "UPDATE players SET name = ?, surname = ?, stand_up = ?, grappling = ?, wrestling = ?, clinch = ?,"
+				+ "club = ?, coach = ? "
 				+ "WHERE id = ?";
 		
 		Object[] params = {player.getName(), player.getSurname(), player.getStandUp(), player.getGrappling(),
-				player.getWrestling(), player.getClinch(), player.getId()
+				player.getWrestling(), player.getClinch(), player.getClub(), player.getCoach(), player.getId()
 		};
 		
 		Db.getJdbcTemplate().update(sql, params);

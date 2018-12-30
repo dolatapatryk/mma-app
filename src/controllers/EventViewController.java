@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import lombok.Getter;
 import models.ChampionModel;
 import models.EventModel;
 import models.FightModel;
@@ -55,7 +56,7 @@ public class EventViewController {
 	@FXML
 	private TextField player2TextField;
 	@FXML
-	private Button fightButton;	
+	private @Getter Button fightButton;	
 	@FXML
 	private ChoiceBox<JudgeModel> judgeChoiceBox = new ChoiceBox<>();
 	private ObservableList<JudgeModel> judgeItems;
@@ -162,6 +163,10 @@ public class EventViewController {
 		else
 			players = PlayerRepository.getPlayersByOrganisationAndWeightClass(event.getOrganisation(), weightClass.getName());
 		playerItems.addAll(players);
+		fightModeChoiceBox.setValue("Walka");
+		player1TextField.setText("");
+		player2TextField.setText("");
+		player1Label.setText("Zawodnik 1");
 	}
 	
 	private void addPlayerToFight(PlayerModel player) {
@@ -172,6 +177,7 @@ public class EventViewController {
 		else if(player2TextField.getText().isEmpty()) {
 			player2TextField.setText(player.toString());
 			player2 = player;
+			fightButton.setDisable(false);
 		}		
 	}
 	
@@ -193,9 +199,12 @@ public class EventViewController {
 		
 		PlayerRepository.updateScore(fight);
 		
-		if(winner == 2 && fightModeChoiceBox.getValue().equals("Walka mistrzowska")) {
+		if(fightModeChoiceBox.getValue().equals("Walka mistrzowska")) {
 			ChampionModel champ = new ChampionModel();
-			champ.setPlayer(player2.getId());
+			if(winner == 1)
+				champ.setPlayer(player1.getId());
+			if(winner == 2)
+				champ.setPlayer(player2.getId());
 			champ.setOrganisation(event.getOrganisation());
 			champ.setWeightClass(weightClassChoiceBox.getValue().getName());
 			
@@ -206,12 +215,15 @@ public class EventViewController {
 		player2TextField.clear();
 		
 		refresh();
+		fightButton.setDisable(true);
 	}
 	
 	public void refresh() {
 		event = EventRepository.get(eventName).get();
 		addPlayersToList();
 		addFightsToList();
+		addJudgesToList();
+		weightClassChoiceBox.setValue(null);
 	}
 	
 	private int doFight(PlayerModel player1, PlayerModel player2) {
@@ -237,20 +249,31 @@ public class EventViewController {
 			if(fight.getWinner() == 0)
 				winnerText.setText("REMIS");
 			else if(fight.getWinner() == 1) {
-				winner = PlayerRepository.get(fight.getPlayer1()).get();
-				winnerText.setText(winner.toString());
+				Optional<PlayerModel> winnerOpt = PlayerRepository.get(fight.getPlayer1());
+				if(winnerOpt.isPresent()) {
+					winner = winnerOpt.get();
+					winnerText.setText(winner.toString());
+				} else 
+					winnerText.setText("Nie znaleziono informacji o zwycięzcy");
 			} else if (fight.getWinner() == 2) {
-				winner = PlayerRepository.get(fight.getPlayer2()).get();
-				winnerText.setText(winner.toString());
+				Optional<PlayerModel> winnerOpt = PlayerRepository.get(fight.getPlayer2());
+				if(winnerOpt.isPresent()) {
+					winner = winnerOpt.get();
+					winnerText.setText(winner.toString());
+				} else 
+					winnerText.setText("Nie znaleziono informacji o zwycięzcy");
 			}
-			
-			JudgeModel judge = new JudgeModel();
-			judge = PersonRepository.getJudge(fight.getJudge()).get();
-			judgeText.setText(judge.toString());
+			Optional<JudgeModel> judgeOpt = PersonRepository.getJudge(fight.getJudge());
+			if(judgeOpt.isPresent())
+				judgeText.setText(judgeOpt.get().toString());
+			else
+				judgeText.setText("Nie znaleziono informacji o sędzi");
 		}
 	}
 	
 	private void addChampionToLabel() {
+		player1TextField.setText("");
+		player2TextField.setText("");
 		String organisation = event.getOrganisation();
 		String weightClass = weightClassChoiceBox.getValue().getName();
 		

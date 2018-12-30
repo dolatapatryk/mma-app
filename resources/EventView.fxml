@@ -16,7 +16,7 @@
       <TextField fx:id="player2TextField" disable="true" layoutX="629.0" layoutY="148.0" />
       <Label fx:id="player1Label" layoutX="435.0" layoutY="119.0" text="Zawodnik 1" />
       <Label layoutX="668.0" layoutY="119.0" text="Zawodnik 2" />
-      <Button fx:id="fightButton" layoutX="561.0" layoutY="148.0" mnemonicParsing="false" onAction="#handleFightButton" text="Walcz" />
+      <Button fx:id="fightButton" disable="true" layoutX="561.0" layoutY="148.0" mnemonicParsing="false" onAction="#handleFightButton" text="Walcz" />
       <ChoiceBox fx:id="judgeChoiceBox" layoutX="465.0" layoutY="193.0" prefHeight="26.0" prefWidth="249.0" />
       <ListView fx:id="fightListView" layoutX="744.0" layoutY="247.0" prefHeight="200.0" prefWidth="432.0" />
       <Label layoutX="960.0" layoutY="231.0" text="Odbyte walki" />

@@ -97,4 +97,16 @@ public class PersonRepository {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void deleteCoach(int id) {
+		String sql = "DELETE FROM coaches WHERE id = ?";
+		
+		Db.getJdbcTemplate().update(sql, new Object[] {id});
+	}
+	
+	public static void deleteJudge(int id) {
+		String sql = "DELETE FROM judges WHERE id = ?";
+		
+		Db.getJdbcTemplate().update(sql, new Object[] {id});
+	}
 }

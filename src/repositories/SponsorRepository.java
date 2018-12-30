@@ -38,4 +38,10 @@ public class SponsorRepository {
 		return Db.getJdbcTemplate().query(sql, new Object[] {playerId, new Date(System.currentTimeMillis())}, mapper);
 	}
 	
+	public static void delete(String name) {
+		String sql = "DELETE FROM sponsors WHERE name = ?";
+		
+		Db.getJdbcTemplate().update(sql, new Object[] {name});
+	}
+	
 }

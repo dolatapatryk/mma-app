@@ -23,5 +23,6 @@
       <Label layoutX="44.0" layoutY="437.0" text="Sponsorzy" />
       <Button fx:id="addSponsorButton" layoutX="73.0" layoutY="686.0" mnemonicParsing="false" onAction="#handleAddSponsorButton" text="Dodaj sponsora" />
       <Button fx:id="addContractButton" layoutX="331.0" layoutY="537.0" mnemonicParsing="false" onAction="#handleAddContractButton" text="Dodaj kontrakt" />
+      <Button fx:id="deleteButton" layoutX="884.0" layoutY="550.0" mnemonicParsing="false" onAction="#handleDeleteButton" text="Usuń" />
    </children>
 </AnchorPane>

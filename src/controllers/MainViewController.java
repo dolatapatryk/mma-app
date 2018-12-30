@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import models.ClubModel;
 import models.CoachModel;
 import models.JudgeModel;
@@ -35,6 +36,8 @@ public class MainViewController {
 	private Button addSponsorButton;
 	@FXML
 	private Button addContractButton;
+	@FXML
+	private Button deleteButton;
 	@FXML
 	private ListView<PlayerModel> playerListView;
 	@FXML
@@ -75,24 +78,28 @@ public class MainViewController {
 		playerItems.clear();
 		List<PlayerModel> players = PlayerRepository.getPlayers();
 		playerItems.addAll(players);
+		playerListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 	}
 	
 	public void addOrgsToList() {
 		orgItems.clear();
 		List<OrganisationModel> orgs = OrganisationRepository.getOrganisations();
 		orgItems.addAll(orgs);
+		orgListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 	}
 	
 	public void addClubsToList() {
 		clubItems.clear();
 		List<ClubModel> clubs = ClubRepository.getClubs();
 		clubItems.addAll(clubs);
+		clubListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 	}
 	
 	public void addSponsorsToList() {
 		sponsorItems.clear();
 		List<SponsorModel> sponsors = SponsorRepository.get();
 		sponsorItems.addAll(sponsors);
+		sponsorListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 	}
 	
 	public void addJudgesCoachesToList() {
@@ -108,6 +115,7 @@ public class MainViewController {
 				return -1;
 			else return 0;
 		});
+		judgeCoachListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 	}
 	
 	@FXML
@@ -138,5 +146,57 @@ public class MainViewController {
 	@FXML
 	private void handleAddContractButton() {
 		Main.getAddContractStage().show();
+	}
+	
+	@FXML
+	private void handleDeleteButton() {
+		if(playerListView.getSelectionModel().getSelectedItem() != null) {
+			for(PlayerModel p : playerListView.getSelectionModel().getSelectedItems()) {
+				PlayerRepository.delete(p.getId());
+			}
+			RootViewController.getOrganisationViewController().refresh();
+			addPlayersToList();
+			RootViewController.getAddContractViewController().addPlayersToList();
+		}
+		
+		if(orgListView.getSelectionModel().getSelectedItem() != null) {
+			for(OrganisationModel o : orgListView.getSelectionModel().getSelectedItems()) {
+				OrganisationRepository.delete(o.getName());
+			}
+			Main.getRootViewController().loadOrganisationsToMenu();
+			RootViewController.getAddPlayerViewController().addOrgsToList();
+			addOrgsToList();
+			addPlayersToList();
+		}
+		
+		if(clubListView.getSelectionModel().getSelectedItem() != null) {
+			for(ClubModel c : clubListView.getSelectionModel().getSelectedItems()) {
+				ClubRepository.delete(c.getName());
+			}
+			RootViewController.getAddPlayerViewController().addClubsToList();
+			addClubsToList();
+		}
+		
+		if(judgeCoachListView.getSelectionModel().getSelectedItem() != null) {
+			for(PersonModel jc : judgeCoachListView.getSelectionModel().getSelectedItems()) {
+				if(jc instanceof JudgeModel) {
+					PersonRepository.deleteJudge(jc.getId());
+				} else if(jc instanceof CoachModel) {
+					PersonRepository.deleteCoach(jc.getId());
+					RootViewController.getAddPlayerViewController().addCoachesToList();
+				}
+			}
+			addJudgesCoachesToList();
+		}
+		
+		if(sponsorListView.getSelectionModel().getSelectedItem() != null) {
+			for(SponsorModel s : sponsorListView.getSelectionModel().getSelectedItems()) {
+				SponsorRepository.delete(s.getName());
+			}
+			addSponsorsToList();
+			RootViewController.getAddContractViewController().addSponsorsToList();
+		}
+		
+		
 	}
 }

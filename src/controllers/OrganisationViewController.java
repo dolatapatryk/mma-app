@@ -1,10 +1,8 @@
 package controllers;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -24,9 +22,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import models.CoachModel;
 import models.OrganisationModel;
+import models.PersonModel;
 import models.PlayerModel;
 import models.SponsorModel;
 import models.WeightClassModel;
+import repositories.ClubRepository;
 import repositories.OrganisationRepository;
 import repositories.PersonRepository;
 import repositories.PlayerRepository;
@@ -56,13 +56,17 @@ public class OrganisationViewController {
 	private ObservableList<WeightClassModel> weightClassItems;
 	
 	@FXML
+	private ChoiceBox<String> clubChoiceBox = new ChoiceBox<>();
+	private ObservableList<String> clubItems;
+	
+	@FXML
+	private ChoiceBox<PersonModel> coachChoiceBox = new ChoiceBox<>();
+	private ObservableList<PersonModel> coachItems;
+	
+	@FXML
 	private TextField nameTextField;
 	@FXML
 	private TextField surnameTextField;
-	@FXML
-	private Text clubText;
-	@FXML
-	private Text coachText;	
 	@FXML
 	private Text winText;
 	@FXML
@@ -99,8 +103,12 @@ public class OrganisationViewController {
 	private void initialize() {
 		weightClassItems = FXCollections.observableArrayList();
 		playerItems = FXCollections.observableArrayList();
+		clubItems = FXCollections.observableArrayList();
+		coachItems = FXCollections.observableArrayList();
 		playerList.setItems(playerItems);
 		weightClassChoiceBox.setItems(weightClassItems);
+		clubChoiceBox.setItems(clubItems);
+		coachChoiceBox.setItems(coachItems);
 		playerItemListener = new ChangeListener<PlayerModel>() {
 			public void changed(ObservableValue<? extends PlayerModel> observable,
     				PlayerModel oldValue, PlayerModel newValue) {
@@ -135,6 +143,18 @@ public class OrganisationViewController {
 		weightClassItems.addAll(weightClasses);
 	}
 	
+	private void addClubsToList() {
+		clubItems.clear();
+		List<String> clubs = ClubRepository.getClubs().stream().map(c -> c.getName()).collect(Collectors.toList());
+		clubItems.addAll(clubs);
+	}
+	
+	private void addCoachesToList() {
+		coachItems.clear();
+		List<CoachModel> coaches = PersonRepository.getCoaches();
+		coachItems.addAll(coaches);
+	}
+	
 	private void addPlayersByWeightClass(WeightClassModel weightClass) {
 		clearListenerPlayerListItemSelected();
 		playerItems.clear();
@@ -161,6 +181,8 @@ public class OrganisationViewController {
 		clearPlayerInfo();
 		addPlayersToList();
 		addWeightClassesToList();
+		addClubsToList();
+		addCoachesToList();
 		addListenerPlayerListItemSelected();
 		addListenerWeightClassItemSelected();
 	}
@@ -175,9 +197,12 @@ public class OrganisationViewController {
 		idLabel.setText(String.valueOf(player.getId()));
 		nameTextField.setText(player.getName());
 		surnameTextField.setText(player.getSurname());
-		clubText.setText(player.getClub());
-		CoachModel coach = PersonRepository.getCoach(player.getCoach()).get();
-		coachText.setText(coach.toString());
+		clubChoiceBox.setValue(player.getClub());
+		Optional<CoachModel> coachOpt = PersonRepository.getCoach(player.getCoach());
+		if(coachOpt.isPresent())
+			coachChoiceBox.setValue(coachOpt.get());
+		else
+			coachChoiceBox.setValue(null);
 		winText.setText(String.valueOf(player.getWins()));
 		lossText.setText(String.valueOf(player.getLosses()));
 		drawText.setText(String.valueOf(player.getDraws()));
@@ -213,8 +238,10 @@ public class OrganisationViewController {
 		} catch (NumberFormatException e) {
 			logger.info(e.getMessage());
 		}
-		
-		
+		if(clubChoiceBox.getValue() != null)
+			player.setClub(clubChoiceBox.getValue());
+		if(coachChoiceBox.getValue() != null)
+			player.setCoach(coachChoiceBox.getValue().getId());
 		
 		PlayerRepository.update(player);
 		refresh();
@@ -226,8 +253,6 @@ public class OrganisationViewController {
 		idLabel.setText("");
 		nameTextField.setText("");
 		surnameTextField.setText("");
-		clubText.setText("");
-		coachText.setText("");
 		winText.setText("");
 		lossText.setText("");
 		drawText.setText("");
@@ -237,6 +262,8 @@ public class OrganisationViewController {
 		clinchTextField.setText("");
 		sponsorText.setText("");
 		paymentText.setText("");
+		clubChoiceBox.setValue(null);
+		coachChoiceBox.setValue(null);
 	}
 	
 	private void clearListenerPlayerListItemSelected() {
