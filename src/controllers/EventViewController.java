@@ -79,6 +79,8 @@ public class EventViewController {
 	@FXML
 	private Button endEventButton;
 	
+	ChangeListener<PlayerModel> playerItemListener;
+	
 	@FXML
 	private void initialize() {
 		weightClassItems = FXCollections.observableArrayList();
@@ -105,13 +107,14 @@ public class EventViewController {
 				}
 			});
 		
+		playerItemListener = new ChangeListener<PlayerModel>() {
+			public void changed(ObservableValue<? extends PlayerModel> observable,
+    				PlayerModel oldValue, PlayerModel newValue) {
+    			addPlayerToFight(newValue);
+    		}
+		};
 		playerListView.getSelectionModel().selectedItemProperty()
-			.addListener(new ChangeListener<PlayerModel>() {
-				@Override
-				public void changed(ObservableValue<? extends PlayerModel> arg0, PlayerModel arg1, PlayerModel arg2) {
-					addPlayerToFight(arg2);
-				}	
-			});
+    		.addListener(playerItemListener);
 		
 		fightListView.getSelectionModel().selectedItemProperty()
 			.addListener(new ChangeListener<FightModel>() {
@@ -156,6 +159,7 @@ public class EventViewController {
 	}
 	
 	private void addPlayersByWeightClass(WeightClassModel weightClass) {
+		clearListenerPlayerListItemSelected();
 		playerItems.clear();
 		List<PlayerModel> players = new ArrayList<>();	
 		if(weightClass == null)
@@ -167,6 +171,7 @@ public class EventViewController {
 		player1TextField.setText("");
 		player2TextField.setText("");
 		player1Label.setText("Zawodnik 1");
+		addListenerPlayerListItemSelected();
 	}
 	
 	private void addPlayerToFight(PlayerModel player) {
@@ -219,11 +224,13 @@ public class EventViewController {
 	}
 	
 	public void refresh() {
+		clearListenerPlayerListItemSelected();
 		event = EventRepository.get(eventName).get();
 		addPlayersToList();
 		addFightsToList();
 		addJudgesToList();
 		weightClassChoiceBox.setValue(null);
+		addListenerPlayerListItemSelected();
 	}
 	
 	private int doFight(PlayerModel player1, PlayerModel player2) {
@@ -290,5 +297,15 @@ public class EventViewController {
 		EventRepository.endEvent(event.getId());
 		Main.getRootLayout().setCenter(Main.getRootViewController().getMainView());
 		Main.getRootViewController().loadEventsToMenu();
+	}
+	
+	private void clearListenerPlayerListItemSelected() {
+		playerListView.getSelectionModel().selectedItemProperty()
+			.removeListener(playerItemListener);
+	}
+	
+	private void addListenerPlayerListItemSelected() {
+		playerListView.getSelectionModel().selectedItemProperty()
+			.addListener(playerItemListener);
 	}
 }
