@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import javafx.scene.control.*;
+import javafx.scene.layout.Background;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,11 +17,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import lombok.Getter;
 import models.ChampionModel;
@@ -76,10 +74,13 @@ public class EventViewController {
 	private ObservableList<String> fightModeItems;
 	@FXML
 	private Label player1Label;
-	@FXML
-	private Button endEventButton;
 	
 	ChangeListener<PlayerModel> playerItemListener;
+
+	private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(palegreen, 50%)";
+
+	private Callback<ListView<PlayerModel>, ListCell<PlayerModel>> defaultCellFactory;
+
 	
 	@FXML
 	private void initialize() {
@@ -97,7 +98,8 @@ public class EventViewController {
 		fightModeChoiceBox.getSelectionModel().selectFirst();
 		addWeightClassesToList();
 		addJudgesToList();
-		
+		defaultCellFactory = playerListView.getCellFactory();
+
 		weightClassChoiceBox.getSelectionModel().selectedItemProperty()
 			.addListener(new ChangeListener<WeightClassModel>() {
 				@Override
@@ -130,6 +132,8 @@ public class EventViewController {
 				public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 					if(arg2.equals("Walka mistrzowska"))
 						addChampionToLabel();
+					if(arg2.equals("Walka"))
+						setNormalFightMode();
 				}
 			});
 	}
@@ -159,31 +163,44 @@ public class EventViewController {
 	}
 	
 	private void addPlayersByWeightClass(WeightClassModel weightClass) {
-		clearListenerPlayerListItemSelected();
-		playerItems.clear();
-		List<PlayerModel> players = new ArrayList<>();	
-		if(weightClass == null)
-			players = PlayerRepository.getPlayersByOrganisation(event.getOrganisation());
-		else
-			players = PlayerRepository.getPlayersByOrganisationAndWeightClass(event.getOrganisation(), weightClass.getName());
-		playerItems.addAll(players);
-		fightModeChoiceBox.setValue("Walka");
-		player1TextField.setText("");
-		player2TextField.setText("");
-		player1Label.setText("Zawodnik 1");
-		addListenerPlayerListItemSelected();
+		if(weightClass != null) {
+			clearListenerPlayerListItemSelected();
+			playerItems.clear();
+			playerListView.setCellFactory(defaultCellFactory);
+
+			List<PlayerModel> players;
+			if (weightClass == null)
+				players = PlayerRepository.getPlayersByOrganisation(event.getOrganisation());
+			else
+				players = PlayerRepository.getPlayersByOrganisationAndWeightClass(event.getOrganisation(), weightClass.getName());
+			playerItems.addAll(players);
+			fightModeChoiceBox.setValue("Walka");
+			player1TextField.setText("");
+			player2TextField.setText("");
+			player1Label.setText("Zawodnik 1");
+
+			if(weightClass != null) {
+				Optional<ChampionModel> champOpt = ChampionRepository.get(event.getOrganisation(), weightClass.getName());
+				if(champOpt.isPresent()) {
+					setColorToChampionCell(playerListView, champOpt.get().getPlayer());
+				}
+			}
+
+			addListenerPlayerListItemSelected();
+		}
 	}
 	
 	private void addPlayerToFight(PlayerModel player) {
-		if(player1TextField.getText().isEmpty()) {
-			player1TextField.setText(player.toString());
-			player1 = player;
+		if(player != null) {
+			if (player1TextField.getText().isEmpty()) {
+				player1TextField.setText(player.toString());
+				player1 = player;
+			} else if (player2TextField.getText().isEmpty()) {
+				player2TextField.setText(player.toString());
+				player2 = player;
+				fightButton.setDisable(false);
+			}
 		}
-		else if(player2TextField.getText().isEmpty()) {
-			player2TextField.setText(player.toString());
-			player2 = player;
-			fightButton.setDisable(false);
-		}		
 	}
 	
 	@FXML
@@ -205,15 +222,19 @@ public class EventViewController {
 		PlayerRepository.updateScore(fight);
 		
 		if(fightModeChoiceBox.getValue().equals("Walka mistrzowska")) {
-			ChampionModel champ = new ChampionModel();
+			Optional<ChampionModel> champOpt = ChampionRepository.get(event.getOrganisation(), weightClassChoiceBox.getValue().getName());
+			ChampionModel champTmp = new ChampionModel();
 			if(winner == 1)
-				champ.setPlayer(player1.getId());
+				champTmp.setPlayer(player1.getId());
 			if(winner == 2)
-				champ.setPlayer(player2.getId());
-			champ.setOrganisation(event.getOrganisation());
-			champ.setWeightClass(weightClassChoiceBox.getValue().getName());
-			
-			ChampionRepository.updateChamp(champ);
+				champTmp.setPlayer(player2.getId());
+			champTmp.setOrganisation(event.getOrganisation());
+			champTmp.setWeightClass(weightClassChoiceBox.getValue().getName());
+
+			if(champOpt.isPresent())
+				ChampionRepository.updateChamp(champTmp);
+			else
+				ChampionRepository.create(champTmp);
 		}
 		
 		player1TextField.clear();
@@ -231,6 +252,7 @@ public class EventViewController {
 		addJudgesToList();
 		weightClassChoiceBox.setValue(null);
 		addListenerPlayerListItemSelected();
+		playerListView.setCellFactory(defaultCellFactory);
 	}
 	
 	private int doFight(PlayerModel player1, PlayerModel player2) {
@@ -252,7 +274,7 @@ public class EventViewController {
 			winnerLabel.setVisible(true);
 			judgeLabel.setVisible(true);
 			
-			PlayerModel winner = new PlayerModel();
+			PlayerModel winner;
 			if(fight.getWinner() == 0)
 				winnerText.setText("REMIS");
 			else if(fight.getWinner() == 1) {
@@ -279,16 +301,18 @@ public class EventViewController {
 	}
 	
 	private void addChampionToLabel() {
-		player1TextField.setText("");
-		player2TextField.setText("");
+		player1TextField.clear();
+		player2TextField.clear();
 		String organisation = event.getOrganisation();
-		String weightClass = weightClassChoiceBox.getValue().getName();
-		
-		Optional<ChampionModel> champOpt = ChampionRepository.get(organisation, weightClass);
-		if(champOpt.isPresent()) {
-			player1 = PlayerRepository.get(champOpt.get().getPlayer()).get();
-			player1TextField.setText(player1.toString());
-			player1Label.setText("Mistrz");
+		WeightClassModel weightClass = weightClassChoiceBox.getValue();
+		if(weightClass != null) {
+			String weightClassName = weightClass.getName();
+			Optional<ChampionModel> champOpt = ChampionRepository.get(organisation, weightClassName);
+			if (champOpt.isPresent()) {
+				player1 = PlayerRepository.get(champOpt.get().getPlayer()).get();
+				player1TextField.setText(player1.toString());
+				player1Label.setText("Mistrz");
+			}
 		}
 	}
 	
@@ -297,6 +321,12 @@ public class EventViewController {
 		EventRepository.endEvent(event.getId());
 		Main.getRootLayout().setCenter(Main.getRootViewController().getMainView());
 		Main.getRootViewController().loadEventsToMenu();
+	}
+
+	@FXML
+	private void handleClearButton() {
+		player1TextField.clear();
+		player2TextField.clear();
 	}
 	
 	private void clearListenerPlayerListItemSelected() {
@@ -307,5 +337,34 @@ public class EventViewController {
 	private void addListenerPlayerListItemSelected() {
 		playerListView.getSelectionModel().selectedItemProperty()
 			.addListener(playerItemListener);
+	}
+
+	private void setNormalFightMode() {
+		player1TextField.clear();
+		player2TextField.clear();
+		player1Label.setText("Zawodnik 1");
+	}
+
+	private void setColorToChampionCell(ListView<PlayerModel> listView, int championId) {
+		listView.setCellFactory(new Callback<ListView<PlayerModel>, ListCell<PlayerModel>>() {
+			@Override
+			public ListCell<PlayerModel> call(ListView<PlayerModel> param) {
+				return new ListCell<PlayerModel>() {
+					@Override
+					protected void updateItem(PlayerModel item, boolean empty) {
+						super.updateItem(item, empty);
+
+						if (item == null || empty) {
+							setText(null);
+						} else {
+							setText(item.toString());
+							if (item.getId() == championId) {
+								setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
+							}
+						}
+					}
+				};
+			}
+		});
 	}
 }

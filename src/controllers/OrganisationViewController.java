@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javafx.scene.control.*;
+import javafx.util.Callback;
+import models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,24 +17,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import models.CoachModel;
-import models.OrganisationModel;
-import models.PersonModel;
-import models.PlayerModel;
-import models.SponsorModel;
-import models.WeightClassModel;
-import repositories.ClubRepository;
-import repositories.OrganisationRepository;
-import repositories.PersonRepository;
-import repositories.PlayerRepository;
-import repositories.SponsorRepository;
-import repositories.WeightClassRepository;
+import repositories.*;
 
 public class OrganisationViewController {
 
@@ -98,6 +85,10 @@ public class OrganisationViewController {
 	private ListView<PlayerModel> playerList;
 	
 	private ObservableList<PlayerModel> playerItems;
+
+	private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(palegreen, 50%)";
+
+	private Callback<ListView<PlayerModel>, ListCell<PlayerModel>> defaultCellFactory;
 	
 	@FXML
 	private void initialize() {
@@ -109,6 +100,8 @@ public class OrganisationViewController {
 		weightClassChoiceBox.setItems(weightClassItems);
 		clubChoiceBox.setItems(clubItems);
 		coachChoiceBox.setItems(coachItems);
+		defaultCellFactory = playerList.getCellFactory();
+
 		playerItemListener = new ChangeListener<PlayerModel>() {
 			public void changed(ObservableValue<? extends PlayerModel> observable,
     				PlayerModel oldValue, PlayerModel newValue) {
@@ -156,15 +149,27 @@ public class OrganisationViewController {
 	}
 	
 	private void addPlayersByWeightClass(WeightClassModel weightClass) {
-		clearListenerPlayerListItemSelected();
-		playerItems.clear();
-		List<PlayerModel> players = new ArrayList<>();	
-		if(weightClass == null)
-			players = PlayerRepository.getPlayersByOrganisation(organisation);
-		else
-			players = PlayerRepository.getPlayersByOrganisationAndWeightClass(organisation, weightClass.getName());
-		playerItems.addAll(players);
-		addListenerPlayerListItemSelected();
+		if(weightClass != null) {
+			clearListenerPlayerListItemSelected();
+			playerItems.clear();
+			playerList.setCellFactory(defaultCellFactory);
+
+			List<PlayerModel> players;
+			if (weightClass == null)
+				players = PlayerRepository.getPlayersByOrganisation(organisation);
+			else
+				players = PlayerRepository.getPlayersByOrganisationAndWeightClass(organisation, weightClass.getName());
+			playerItems.addAll(players);
+
+			if(weightClass != null) {
+				Optional<ChampionModel> champOpt = ChampionRepository.get(organisation, weightClass.getName());
+				if(champOpt.isPresent()) {
+					setColorToChampionCell(playerList, champOpt.get().getPlayer());
+				}
+			}
+
+			addListenerPlayerListItemSelected();
+		}
 	}
 	
 	
@@ -185,6 +190,7 @@ public class OrganisationViewController {
 		addCoachesToList();
 		addListenerPlayerListItemSelected();
 		addListenerWeightClassItemSelected();
+		playerList.setCellFactory(defaultCellFactory);
 	}
 	
 	@FXML
@@ -284,6 +290,29 @@ public class OrganisationViewController {
 	private void addListenerWeightClassItemSelected() {
 		weightClassChoiceBox.getSelectionModel().selectedItemProperty()
 			.addListener(weightClassItemListener);
+	}
+
+	private void setColorToChampionCell(ListView<PlayerModel> listView, int championId) {
+		listView.setCellFactory(new Callback<ListView<PlayerModel>, ListCell<PlayerModel>>() {
+			@Override
+			public ListCell<PlayerModel> call(ListView<PlayerModel> param) {
+				return new ListCell<PlayerModel>() {
+					@Override
+					protected void updateItem(PlayerModel item, boolean empty) {
+						super.updateItem(item, empty);
+
+						if (item == null || empty) {
+							setText(null);
+						} else {
+							setText(item.toString());
+							if (item.getId() == championId) {
+								setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
+							}
+						}
+					}
+				};
+			}
+		});
 	}
 	
 }
