@@ -152,5 +152,11 @@ public class AddPlayerViewController {
 		surnameTextField.setText("");
 		clubChoiceBox.setValue(null);
 		organisationChoiceBox.setValue(null);
+		weightClassChoiceBox.setValue(null);
+		standUpTextField.clear();
+		grapplingTextField.clear();
+		wrestlingTextField.clear();
+		clinchTextField.clear();
+		coachChoiceBox.setValue(null);
 	}
 }
