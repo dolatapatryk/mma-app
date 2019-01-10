@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane minHeight="500.0" minWidth="500.0" prefHeight="768.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RootViewController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+         <menus>
+            <Menu fx:id="actionMenu" mnemonicParsing="false" text="Akcje">
+              <items>
+                  <MenuItem fx:id="mainSceneMenuItem" mnemonicParsing="false" onAction="#setMainScene" text="Ekran główny" />
+                <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#closeApp" text="Zakończ" />
+                  <MenuItem fx:id="addEventMenuItem" mnemonicParsing="false" onAction="#handleAddEventMenuItem" text="Stwórz galę" />
+              </items>
+            </Menu>
+            <Menu fx:id="organisationMenu" mnemonicParsing="false" text="Organizacje" />
+            <Menu fx:id="eventMenu" mnemonicParsing="false" text="Gala" />
+         </menus>
+      </MenuBar>
+   </top>
+</BorderPane>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="739.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OrganisationViewController">
+   <children>
+      <ListView fx:id="playerList" layoutX="77.0" layoutY="68.0" prefHeight="259.0" prefWidth="265.0" />
+      <Button fx:id="addPlayerButton" layoutX="92.0" layoutY="357.0" mnemonicParsing="false" onAction="#handleAddPlayerButton" text="Dodaj zawodnika" />
+      <Text fx:id="organisationNameText" layoutX="1000.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Text fx:id="organisationBudgetText" layoutX="1000.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Label layoutX="904.0" layoutY="71.0" text="Nazwa" />
+      <Label layoutX="904.0" layoutY="114.0" text="Budżet" />
+      <Label layoutX="905.0" layoutY="155.0" text="Adres" />
+      <Label layoutX="902.0" layoutY="197.0" text="Miasto" />
+      <Text fx:id="organisationAddressText" layoutX="1000.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Text fx:id="organisationCityText" layoutX="1000.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Label fx:id="clubLabel" layoutX="352.0" layoutY="114.0" text="Klub" />
+      <Label fx:id="coachLabel" layoutX="354.0" layoutY="140.0" text="Trener" />
+      <Label fx:id="winsLabel" layoutX="353.0" layoutY="163.0" text="Wygrane" />
+      <Label fx:id="lossesLabel" layoutX="350.0" layoutY="190.0" text="Przegrane" />
+      <Label fx:id="drawsLabel" layoutX="352.0" layoutY="213.0" text="Remisy" />
+      <Label fx:id="standUpLabel" layoutX="355.0" layoutY="241.0" text="Stójka" />
+      <Label fx:id="grapplingLabel" layoutX="355.0" layoutY="265.0" text="Parter" />
+      <Label fx:id="wrestlingLabel" layoutX="351.0" layoutY="289.0" text="Zapasy" />
+      <Label fx:id="clinchLabel" layoutX="356.0" layoutY="311.0" text="Klincz" />
+      <ChoiceBox fx:id="weightClassChoiceBox" layoutX="77.0" layoutY="25.0" prefHeight="26.0" prefWidth="265.0" />
+      <Label fx:id="nameLabel" layoutX="349.0" layoutY="60.0" text="Imię" />
+      <Label fx:id="surnameLabel" layoutX="349.0" layoutY="87.0" text="Nazwisko" />
+      <TextField fx:id="nameTextField" layoutX="434.0" layoutY="55.0" />
+      <TextField fx:id="surnameTextField" layoutX="434.0" layoutY="82.0" />
+      <Text fx:id="winText" layoutX="434.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Text fx:id="lossText" layoutX="434.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Text fx:id="drawText" layoutX="434.0" layoutY="226.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <TextField fx:id="standUpTextField" layoutX="434.0" layoutY="236.0" />
+      <TextField fx:id="grapplingTextField" layoutX="434.0" layoutY="260.0" />
+      <TextField fx:id="wrestlingTextField" layoutX="434.0" layoutY="284.0" />
+      <TextField fx:id="clinchTextField" layoutX="434.0" layoutY="306.0" />
+      <Button fx:id="updateButton" layoutX="342.0" layoutY="392.0" mnemonicParsing="false" onAction="#handleUpdateButton" text="Aktualizuj" />
+      <Label layoutX="349.0" layoutY="38.0" text="ID" />
+      <Label fx:id="idLabel" layoutX="438.0" layoutY="38.0" />
+      <Label layoutX="349.0" layoutY="341.0" text="Sponsorzy" />
+      <Label layoutX="349.0" layoutY="362.0" text="Zarobki" />
+      <Text fx:id="sponsorText" layoutX="435.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Text fx:id="paymentText" layoutX="435.0" layoutY="375.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <ChoiceBox fx:id="clubChoiceBox" layoutX="434.0" layoutY="109.0" prefHeight="26.0" prefWidth="171.0" />
+      <ChoiceBox fx:id="coachChoiceBox" layoutX="434.0" layoutY="135.0" prefHeight="26.0" prefWidth="171.0" />
+   </children>
+</AnchorPane>
