@@ -10,15 +10,15 @@
    <children>
       <TextField fx:id="nameTextField" layoutX="26.0" layoutY="68.0" />
       <TextField fx:id="surnameTextField" layoutX="26.0" layoutY="155.0" />
-      <Label layoutX="26.0" layoutY="45.0" text="Imię" />
-      <Label layoutX="26.0" layoutY="131.0" text="Nazwisko" />
+      <Label layoutX="26.0" layoutY="45.0" text="Imię *" />
+      <Label layoutX="26.0" layoutY="131.0" text="Nazwisko *" />
       <ChoiceBox fx:id="organisationChoiceBox" layoutX="26.0" layoutY="312.0" prefHeight="26.0" prefWidth="171.0" />
       <ChoiceBox fx:id="clubChoiceBox" layoutX="26.0" layoutY="233.0" prefHeight="26.0" prefWidth="171.0" />
       <Label layoutX="26.0" layoutY="210.0" text="Klub" />
-      <Label layoutX="26.0" layoutY="286.0" text="Organizacja" />
+      <Label layoutX="26.0" layoutY="286.0" text="Organizacja *" />
       <Button fx:id="okButton" layoutX="179.0" layoutY="464.0" mnemonicParsing="false" onAction="#handleOkButton" prefHeight="26.0" prefWidth="62.0" text="OK" />
       <ChoiceBox fx:id="weightClassChoiceBox" layoutX="29.0" layoutY="396.0" prefHeight="26.0" prefWidth="171.0" />
-      <Label layoutX="28.0" layoutY="372.0" text="Kategoria wagowa" />
+      <Label layoutX="28.0" layoutY="372.0" text="Kategoria wagowa *" />
       <TextField fx:id="standUpTextField" layoutX="231.0" layoutY="68.0" />
       <TextField fx:id="grapplingTextField" layoutX="231.0" layoutY="155.0" />
       <TextField fx:id="wrestlingTextField" layoutX="231.0" layoutY="233.0" />
@@ -28,6 +28,7 @@
       <Label layoutX="231.0" layoutY="131.0" text="Parter" />
       <Label layoutX="231.0" layoutY="210.0" text="Zapasy" />
       <Label layoutX="231.0" layoutY="286.0" text="Klincz" />
-      <Label layoutX="231.0" layoutY="372.0" text="Trener" />
+      <Label layoutX="231.0" layoutY="372.0" text="Trener *" />
+      <Label layoutX="317.0" layoutY="482.0" text="* - wymagane" />
    </children>
 </AnchorPane>

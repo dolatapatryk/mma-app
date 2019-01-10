@@ -73,7 +73,6 @@ public class PlayerRepository {
 		String sql = "INSERT INTO players(name, surname, club, organisation, weight_class, "
 				+ "stand_up, grappling, wrestling, clinch, coach) values(?, ?, ?, ?, ?, ?, ?, "
 				+ "?, ?, ?)";
-		
 		try (Connection connection = Db.getJdbcTemplate().getDataSource().getConnection()) {
 			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, player.getName());
@@ -87,7 +86,7 @@ public class PlayerRepository {
 			ps.setInt(9, player.getClinch());
 			ps.setInt(10, player.getCoach());
 			ps.execute();
-			
+
 			ResultSet generatedKeys = ps.getGeneratedKeys();
 			generatedKeys.next();
 			player.setId(generatedKeys.getInt(1));

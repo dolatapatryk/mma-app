@@ -5,16 +5,17 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="452.0" prefWidth="230.0" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddOrganisationViewController">
+<AnchorPane prefHeight="452.0" prefWidth="230.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddOrganisationViewController">
    <children>
       <TextField fx:id="nameTextField" layoutX="26.0" layoutY="68.0" />
       <TextField fx:id="budgetTextField" layoutX="26.0" layoutY="155.0" />
-      <Label layoutX="26.0" layoutY="45.0" text="Nazwa" />
-      <Label layoutX="26.0" layoutY="131.0" text="Budżet" />
-      <Label layoutX="26.0" layoutY="210.0" text="Adres" />
-      <Label layoutX="26.0" layoutY="286.0" text="Miasto" />
+      <Label layoutX="26.0" layoutY="45.0" text="Nazwa *" />
+      <Label layoutX="26.0" layoutY="131.0" text="Budżet *" />
+      <Label layoutX="26.0" layoutY="210.0" text="Adres *" />
+      <Label layoutX="26.0" layoutY="286.0" text="Miasto *" />
       <Button fx:id="okButton" layoutX="81.0" layoutY="379.0" mnemonicParsing="false" onAction="#handleOkButton" prefHeight="26.0" prefWidth="62.0" text="OK" />
       <TextField fx:id="addressTextField" layoutX="26.0" layoutY="239.0" />
       <TextField fx:id="cityTextField" layoutX="27.0" layoutY="319.0" />
+      <Label layoutX="125.0" layoutY="422.0" text="* - wymagane" />
    </children>
 </AnchorPane>

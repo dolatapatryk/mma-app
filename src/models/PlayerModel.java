@@ -16,7 +16,7 @@ public @Data class PlayerModel extends PersonModel {
 	private int grappling;
 	private int wrestling;
 	private int clinch;
-	private int coach;
+	private Integer coach;
 	
 	
 	@Override

@@ -8,10 +8,11 @@
 <AnchorPane prefHeight="347.0" prefWidth="230.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddJudgeCoachController">
    <children>
       <TextField fx:id="nameTextField" layoutX="26.0" layoutY="68.0" />
-      <Label layoutX="26.0" layoutY="45.0" text="Imię" />
-      <Label layoutX="29.0" layoutY="114.0" text="Nazwisko" />
+      <Label layoutX="26.0" layoutY="45.0" text="Imię *" />
+      <Label layoutX="29.0" layoutY="114.0" text="Nazwisko *" />
       <TextField fx:id="surnameTextField" layoutX="26.0" layoutY="150.0" />
       <Button fx:id="judgeButton" layoutX="24.0" layoutY="246.0" mnemonicParsing="false" onAction="#handleJudgeButton" text="Sędzia" />
       <Button fx:id="coachButton" layoutX="135.0" layoutY="246.0" mnemonicParsing="false" onAction="#handleCoachButton" text="Trener" />
+      <Label layoutX="112.0" layoutY="317.0" text="* - wymagane" />
    </children>
 </AnchorPane>

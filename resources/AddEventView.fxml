@@ -10,14 +10,15 @@
    <children>
       <TextField fx:id="nameTextField" layoutX="26.0" layoutY="68.0" />
       <TextField fx:id="countryTextField" layoutX="26.0" layoutY="155.0" />
-      <Label layoutX="26.0" layoutY="45.0" text="Nazwa" />
-      <Label layoutX="26.0" layoutY="131.0" text="Kraj" />
-      <Label layoutX="26.0" layoutY="210.0" text="Miasto" />
-      <Label layoutX="26.0" layoutY="286.0" text="Arena" />
+      <Label layoutX="26.0" layoutY="45.0" text="Nazwa *" />
+      <Label layoutX="26.0" layoutY="131.0" text="Kraj *" />
+      <Label layoutX="26.0" layoutY="210.0" text="Miasto *" />
+      <Label layoutX="26.0" layoutY="286.0" text="Arena *" />
       <Button fx:id="okButton" layoutX="83.0" layoutY="452.0" mnemonicParsing="false" onAction="#handleOkButton" prefHeight="26.0" prefWidth="62.0" text="OK" />
       <TextField fx:id="cityTextField" layoutX="26.0" layoutY="239.0" />
       <TextField fx:id="arenaTextField" layoutX="27.0" layoutY="319.0" />
-      <Label layoutX="28.0" layoutY="367.0" text="Organizacja" />
+      <Label layoutX="28.0" layoutY="367.0" text="Organizacja *" />
       <ChoiceBox fx:id="organisationChoiceBox" layoutX="28.0" layoutY="391.0" prefHeight="26.0" prefWidth="171.0" />
+      <Label layoutX="124.0" layoutY="487.0" text="* - wymagane" />
    </children>
 </AnchorPane>

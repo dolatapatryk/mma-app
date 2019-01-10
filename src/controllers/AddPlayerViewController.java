@@ -3,9 +3,11 @@ package controllers;
 import java.util.List;
 
 import application.Main;
+import exceptions.NoDataException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -68,59 +70,66 @@ public class AddPlayerViewController {
 	
 	@FXML
 	private void handleOkButton() {
-		PlayerModel player = new PlayerModel();
-		if(!nameTextField.getText().isEmpty())
-			player.setName(nameTextField.getText());
-		if(!surnameTextField.getText().isEmpty())
-			player.setSurname(surnameTextField.getText());
-		if(clubChoiceBox.getValue() != null)
-			player.setClub(clubChoiceBox.getValue().getName());
-		if(organisationChoiceBox.getValue() != null)
-			player.setOrganisation(organisationChoiceBox.getValue().getName());
-		if(weightClassChoiceBox.getValue() != null)
-			player.setWeightClass(weightClassChoiceBox.getValue().getName());
-		if(!standUpTextField.getText().isEmpty()) {
-			try {
-				int standUp = Integer.valueOf(standUpTextField.getText());
-				player.setStandUp(standUp);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
+		try {
+			PlayerModel player = new PlayerModel();
+
+			if (nameTextField.getText().isEmpty() || surnameTextField.getText().isEmpty()
+					|| organisationChoiceBox.getValue() == null || weightClassChoiceBox.getValue() == null
+					|| coachChoiceBox.getValue() == null) {
+				throw new NoDataException();
+			} else {
+				player.setName(nameTextField.getText());
+				player.setSurname(surnameTextField.getText());
+				player.setOrganisation(organisationChoiceBox.getValue().getName());
+				player.setWeightClass(weightClassChoiceBox.getValue().getName());
+				player.setCoach(coachChoiceBox.getValue().getId());
 			}
-		}
-		if(!grapplingTextField.getText().isEmpty()) {
-			try {
-				int grappling = Integer.valueOf(grapplingTextField.getText());
-				player.setGrappling(grappling);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
+
+			if (clubChoiceBox.getValue() != null)
+				player.setClub(clubChoiceBox.getValue().getName());
+
+			if (!standUpTextField.getText().isEmpty()) {
+				try {
+					int standUp = Integer.valueOf(standUpTextField.getText());
+					player.setStandUp(standUp);
+				} catch (NumberFormatException e) {
+					throw new NumberFormatException();
+				}
 			}
-		}
-		if(!wrestlingTextField.getText().isEmpty()) {
-			try {
-				int wrestling = Integer.valueOf(wrestlingTextField.getText());
-				player.setWrestling(wrestling);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
+			if (!grapplingTextField.getText().isEmpty()) {
+				try {
+					int grappling = Integer.valueOf(grapplingTextField.getText());
+					player.setGrappling(grappling);
+				} catch (NumberFormatException e) {
+					throw new NumberFormatException();
+				}
 			}
-		}
-		if(!clinchTextField.getText().isEmpty()) {
-			try {
-				int clinch = Integer.valueOf(clinchTextField.getText());
-				player.setClinch(clinch);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
+			if (!wrestlingTextField.getText().isEmpty()) {
+				try {
+					int wrestling = Integer.valueOf(wrestlingTextField.getText());
+					player.setWrestling(wrestling);
+				} catch (NumberFormatException e) {
+					throw new NumberFormatException();
+				}
 			}
+			if (!clinchTextField.getText().isEmpty()) {
+				try {
+					int clinch = Integer.valueOf(clinchTextField.getText());
+					player.setClinch(clinch);
+				} catch (NumberFormatException e) {
+					throw new NumberFormatException();
+				}
+			}
+			PlayerRepository.create(player);
+
+			reset();
+			Main.getAddPlayerStage().close();
+			RootViewController.getOrganisationViewController().refresh();
+			RootViewController.getMainViewController().addPlayersToList();
+			RootViewController.getAddContractViewController().addPlayersToList();
+		} catch (Exception e) {
+			handleException(e);
 		}
-		if(coachChoiceBox.getValue() != null)
-			player.setCoach(coachChoiceBox.getValue().getId());
-		
-		PlayerRepository.create(player);
-		
-		reset();
-		Main.getAddPlayerStage().close();
-		RootViewController.getOrganisationViewController().refresh();
-		RootViewController.getMainViewController().addPlayersToList();
-		RootViewController.getAddContractViewController().addPlayersToList();
 	}
 	
 	public void addClubsToList() {
@@ -158,5 +167,31 @@ public class AddPlayerViewController {
 		wrestlingTextField.clear();
 		clinchTextField.clear();
 		coachChoiceBox.setValue(null);
+	}
+
+	private void showIntegerMessageDialog() {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.setHeaderText("Błędna wartość!");
+		alert.setContentText("Statystyka zawodnika powinna być liczbą całkowitą!");
+
+		alert.showAndWait();
+	}
+
+	private void showEnterDataMessageDialog() {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.setHeaderText("Brak danych");
+		alert.setContentText("Wymagane pola nie mogą być puste!");
+
+		alert.showAndWait();
+	}
+
+	private void handleException(Exception e) {
+		if(e instanceof NoDataException)
+			showEnterDataMessageDialog();
+		if(e instanceof NumberFormatException)
+			showIntegerMessageDialog();
+		e.printStackTrace();
 	}
 }

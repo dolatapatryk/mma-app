@@ -4,13 +4,13 @@ import java.sql.Date;
 import java.util.List;
 
 import application.Main;
+import exceptions.NoDataException;
+import exceptions.UniqueKeyException;
+import exceptions.WrongDatesException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import models.ContractModel;
 import models.PlayerModel;
 import models.SponsorModel;
@@ -48,28 +48,40 @@ public class AddContractViewController {
 	
 	@FXML
 	private void handleOkButton() {
-		ContractModel contract = new ContractModel();
-		if(playerChoiceBox.getValue() != null)
-			contract.setPlayer(playerChoiceBox.getValue().getId());
-		if(sponsorChoiceBox.getValue() != null)
-			contract.setSponsor(sponsorChoiceBox.getValue().getName());
-		if(!paymentTextField.getText().isEmpty()) {
-			try {
-				double payment = Double.valueOf(paymentTextField.getText());
-				contract.setPayment(payment);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
+		try {
+			ContractModel contract = new ContractModel();
+
+			if (playerChoiceBox.getValue() == null || sponsorChoiceBox.getValue() == null
+					|| paymentTextField.getText().isEmpty() || fromDatePicker.getValue() == null
+					|| toDatePicker.getValue() == null) {
+				throw new NoDataException();
+			} else {
+				contract.setPlayer(playerChoiceBox.getValue().getId());
+				contract.setSponsor(sponsorChoiceBox.getValue().getName());
+
+				contract.setDateFrom(Date.valueOf(fromDatePicker.getValue().plusDays(1)));
+				contract.setDateTo(Date.valueOf(toDatePicker.getValue().plusDays(1)));
+
+				if(contract.getDateTo().getTime() < contract.getDateFrom().getTime())
+					throw new WrongDatesException();
+
+				try {
+					String paymentString = paymentTextField.getText();
+					paymentString = paymentString.replace(",", ".");
+					double budget = Double.valueOf(paymentString);
+					contract.setPayment(budget);
+				} catch (NumberFormatException e) {
+					throw new NumberFormatException();
+				}
 			}
+
+			ContractRepository.create(contract);
+
+			reset();
+			Main.getAddContractStage().close();
+		} catch (Exception e) {
+			handleException(e);
 		}
-		if(fromDatePicker.getValue() != null)
-			contract.setDateFrom(Date.valueOf(fromDatePicker.getValue().plusDays(1)));
-		if(toDatePicker.getValue() != null)
-			contract.setDateTo(Date.valueOf(toDatePicker.getValue().plusDays(1)));
-		
-		ContractRepository.create(contract);
-		
-		reset();
-		Main.getAddContractStage().close();
 	}
 	
 	public void addPlayersToList() {
@@ -91,5 +103,43 @@ public class AddContractViewController {
 		fromDatePicker.setValue(null);
 		toDatePicker.setValue(null);
 	}
+	private void showNumberMessageDialog() {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.setHeaderText("Błędna wartość!");
+		alert.setContentText("Zapłata musi być liczbą !");
+
+		alert.showAndWait();
+	}
+
+	private void showEnterDataMessageDialog() {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.setHeaderText("Brak danych");
+		alert.setContentText("Wymagane pola nie mogą być puste!");
+
+		alert.showAndWait();
+	}
+
+	private void showWrongDatesMessageDialog() {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.setHeaderText("Złe daty");
+		alert.setContentText("Data \"do\" musi być późniejsza niż data \"od\"");
+
+		alert.showAndWait();
+	}
+
+	private void handleException(Exception e) {
+		if(e instanceof NoDataException)
+			showEnterDataMessageDialog();
+		else if(e instanceof NumberFormatException)
+			showNumberMessageDialog();
+		else if(e instanceof WrongDatesException)
+			showWrongDatesMessageDialog();
+		else
+			e.printStackTrace();
+	}
+
 	
 }

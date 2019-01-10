@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import exceptions.NoDataException;
 import javafx.scene.control.*;
 import javafx.scene.layout.Background;
 import javafx.util.Callback;
@@ -205,43 +206,52 @@ public class EventViewController {
 	
 	@FXML
 	private void handleFightButton() {
-		FightModel fight = new FightModel();
-		if(player1 != null)
-			fight.setPlayer1(player1.getId());
-		if(player2 != null)
-			fight.setPlayer2(player2.getId());
-		fight.setEvent(event.getId());
-		if(judgeChoiceBox.getValue() != null)
-			fight.setJudge(judgeChoiceBox.getValue().getId());
-		int winner = doFight(player1, player2);
-		fight.setWinner(winner);
-		
-		FightRepository.create(fight);
-		logger.info("zakonczono walke");
-		
-		PlayerRepository.updateScore(fight);
-		
-		if(fightModeChoiceBox.getValue().equals("Walka mistrzowska")) {
-			Optional<ChampionModel> champOpt = ChampionRepository.get(event.getOrganisation(), weightClassChoiceBox.getValue().getName());
-			ChampionModel champTmp = new ChampionModel();
-			if(winner == 1)
-				champTmp.setPlayer(player1.getId());
-			if(winner == 2)
-				champTmp.setPlayer(player2.getId());
-			champTmp.setOrganisation(event.getOrganisation());
-			champTmp.setWeightClass(weightClassChoiceBox.getValue().getName());
+		try {
+			FightModel fight = new FightModel();
+			if (player1 != null)
+				fight.setPlayer1(player1.getId());
+			if (player2 != null)
+				fight.setPlayer2(player2.getId());
+			fight.setEvent(event.getId());
 
-			if(champOpt.isPresent())
-				ChampionRepository.updateChamp(champTmp);
+			if (judgeChoiceBox.getValue() == null || weightClassChoiceBox.getValue() == null)
+				throw new NoDataException();
 			else
-				ChampionRepository.create(champTmp);
+				fight.setJudge(judgeChoiceBox.getValue().getId());
+			if (judgeChoiceBox.getValue() != null)
+				fight.setJudge(judgeChoiceBox.getValue().getId());
+			int winner = doFight(player1, player2);
+			fight.setWinner(winner);
+
+			FightRepository.create(fight);
+			logger.info("zakonczono walke");
+
+			PlayerRepository.updateScore(fight);
+
+			if (fightModeChoiceBox.getValue().equals("Walka mistrzowska")) {
+				Optional<ChampionModel> champOpt = ChampionRepository.get(event.getOrganisation(), weightClassChoiceBox.getValue().getName());
+				ChampionModel champTmp = new ChampionModel();
+				if (winner == 1)
+					champTmp.setPlayer(player1.getId());
+				if (winner == 2)
+					champTmp.setPlayer(player2.getId());
+				champTmp.setOrganisation(event.getOrganisation());
+				champTmp.setWeightClass(weightClassChoiceBox.getValue().getName());
+
+				if (champOpt.isPresent())
+					ChampionRepository.updateChamp(champTmp);
+				else
+					ChampionRepository.create(champTmp);
+			}
+
+			player1TextField.clear();
+			player2TextField.clear();
+
+			refresh();
+			fightButton.setDisable(true);
+		} catch (Exception e) {
+			handleException(e);
 		}
-		
-		player1TextField.clear();
-		player2TextField.clear();
-		
-		refresh();
-		fightButton.setDisable(true);
 	}
 	
 	public void refresh() {
@@ -366,5 +376,21 @@ public class EventViewController {
 				};
 			}
 		});
+	}
+
+	private void showEnterDataMessageDialog() {
+		Alert alert = new Alert(Alert.AlertType.WARNING);
+		alert.setTitle("Warning");
+		alert.setHeaderText("Brak danych");
+		alert.setContentText("Wybierz kategorię wagową i/lub sędziego");
+
+		alert.showAndWait();
+	}
+
+	private void handleException(Exception e) {
+		if(e instanceof NoDataException)
+			showEnterDataMessageDialog();
+		else
+			e.printStackTrace();
 	}
 }
