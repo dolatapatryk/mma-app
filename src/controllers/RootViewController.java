@@ -2,8 +2,10 @@ package controllers;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javafx.scene.image.ImageView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +87,12 @@ public class RootViewController {
 	private void setEventView(String event) {
 		EventViewController.eventName = event;
 		Main.getRootLayout().setCenter(eventView);
-		eventViewController.refresh();
+		eventViewController.refresh(true);
+		boolean active = eventViewController.checkIfEventIsActive();
+		if(!active)
+			eventViewController.enableEvent(false);
+		else
+			eventViewController.enableEvent(true);
 		
 		logger.info("przelaczono na widok gali: " + event);
 	}
@@ -104,7 +111,7 @@ public class RootViewController {
 	}
 	
 	public void loadEventsToMenu() {
-		List<EventModel> events = EventRepository.getActiveEvents();
+		List<EventModel> events = EventRepository.getByName();
 		eventMenu.getItems().clear();
 
 		events.stream().map(e -> e.getName()).collect(Collectors.toList())
@@ -114,6 +121,7 @@ public class RootViewController {
 			});
 		
 		setOnActionsToEventMenu();
+		setColorsToEventMenu();
 	}
 	
 	private void setOnActionsToOrganisationMenu() {
@@ -282,5 +290,18 @@ public class RootViewController {
 		Main.getAddEventStage().show();
 	}
 	
-	
+	private void setColorsToEventMenu() {
+		for(MenuItem item : eventMenu.getItems()) {
+			Optional<EventModel> event = EventRepository.getByName(item.getText());
+			if(event.isPresent()) {
+				if(event.get().getActive() == 0) {
+					item.setGraphic(new ImageView(new File(System.getProperty("user.dir") +
+							"/resources/notactive.png").toURI().toString()));
+				} else {
+					item.setGraphic(new ImageView(new File(System.getProperty("user.dir") +
+							"/resources/active.png").toURI().toString()));
+				}
+			}
+		}
+	}
 }

@@ -1,13 +1,11 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import exceptions.NoDataException;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,14 +65,24 @@ public class EventViewController {
 	@FXML
 	private Label judgeLabel;
 	@FXML
+	private Label weightLabel;
+	@FXML
 	private Text winnerText;
 	@FXML
 	private Text judgeText;
+	@FXML
+	private Text weightClassText;
 	@FXML
 	private ChoiceBox<String> fightModeChoiceBox = new ChoiceBox<>();
 	private ObservableList<String> fightModeItems;
 	@FXML
 	private Label player1Label;
+	@FXML
+	private Label player2Label;
+	@FXML
+	private Button endEventButton;
+	@FXML
+	private Button clearButton;
 	
 	ChangeListener<PlayerModel> playerItemListener;
 
@@ -192,7 +200,7 @@ public class EventViewController {
 	}
 	
 	private void addPlayerToFight(PlayerModel player) {
-		if(player != null) {
+		if(player != null && weightClassChoiceBox.getValue() != null) {
 			if (player1TextField.getText().isEmpty()) {
 				player1TextField.setText(player.toString());
 				player1 = player;
@@ -247,22 +255,33 @@ public class EventViewController {
 			player1TextField.clear();
 			player2TextField.clear();
 
-			refresh();
+			refresh(false);
 			fightButton.setDisable(true);
 		} catch (Exception e) {
 			handleException(e);
 		}
 	}
 	
-	public void refresh() {
+	public void refresh(boolean refreshPlayers) {
 		clearListenerPlayerListItemSelected();
-		event = EventRepository.get(eventName).get();
-		addPlayersToList();
+		event = EventRepository.getByName(eventName).get();
+		if(refreshPlayers) {
+			addPlayersToList();
+			weightClassChoiceBox.setValue(null);
+		} else {
+			addPlayersByWeightClass(weightClassChoiceBox.getValue());
+		}
 		addFightsToList();
 		addJudgesToList();
-		weightClassChoiceBox.setValue(null);
+		winnerLabel.setVisible(false);
+		judgeLabel.setVisible(false);
+		weightLabel.setVisible(false);
+		winnerText.setText("");
+		judgeText.setText("");
+		weightClassText.setText("");
 		addListenerPlayerListItemSelected();
-		playerListView.setCellFactory(defaultCellFactory);
+		if(refreshPlayers)
+			playerListView.setCellFactory(defaultCellFactory);
 	}
 	
 	private int doFight(PlayerModel player1, PlayerModel player2) {
@@ -283,6 +302,7 @@ public class EventViewController {
 		if(fight != null) {
 			winnerLabel.setVisible(true);
 			judgeLabel.setVisible(true);
+			weightLabel.setVisible(true);
 			
 			PlayerModel winner;
 			if(fight.getWinner() == 0)
@@ -292,6 +312,9 @@ public class EventViewController {
 				if(winnerOpt.isPresent()) {
 					winner = winnerOpt.get();
 					winnerText.setText(winner.toString());
+					String weightClass = winner.getWeightClass();
+					weightClass = weightClass.substring(5);
+					weightClassText.setText(weightClass);
 				} else 
 					winnerText.setText("Nie znaleziono informacji o zwycięzcy");
 			} else if (fight.getWinner() == 2) {
@@ -299,6 +322,9 @@ public class EventViewController {
 				if(winnerOpt.isPresent()) {
 					winner = winnerOpt.get();
 					winnerText.setText(winner.toString());
+					String weightClass = winner.getWeightClass();
+					weightClass = weightClass.substring(5);
+					weightClassText.setText(weightClass);
 				} else 
 					winnerText.setText("Nie znaleziono informacji o zwycięzcy");
 			}
@@ -337,6 +363,10 @@ public class EventViewController {
 	private void handleClearButton() {
 		player1TextField.clear();
 		player2TextField.clear();
+		weightClassChoiceBox.setValue(null);
+		judgeChoiceBox.setValue(null);
+		addPlayersToList();
+		playerListView.setCellFactory(defaultCellFactory);
 	}
 	
 	private void clearListenerPlayerListItemSelected() {
@@ -392,5 +422,22 @@ public class EventViewController {
 			showEnterDataMessageDialog();
 		else
 			e.printStackTrace();
+	}
+
+	public boolean checkIfEventIsActive() {
+		if(event.getActive() == 0)
+			return false;
+		else
+			return true;
+	}
+
+	public void enableEvent(boolean enable) {
+		fightModeChoiceBox.setDisable(!enable);
+		judgeChoiceBox.setDisable(!enable);
+		endEventButton.setDisable(!enable);
+		player1Label.setDisable(!enable);
+		player2Label.setDisable(!enable);
+		clearButton.setDisable(!enable);
+		playerListView.setDisable(!enable);
 	}
 }

@@ -196,6 +196,15 @@ public class OrganisationViewController {
 	@FXML
 	private void handleAddPlayerButton() {
 		Main.getAddPlayerStage().show();
+		Optional<OrganisationModel> orgOpt = OrganisationRepository.get(organisation);
+		if(orgOpt.isPresent()) {
+			RootViewController.getAddPlayerViewController().getOrganisationChoiceBox().setValue(orgOpt.get());
+			RootViewController.getAddPlayerViewController().getOrganisationChoiceBox().setDisable(true);
+			if(weightClassChoiceBox.getValue() != null) {
+				RootViewController.getAddPlayerViewController().getWeightClassChoiceBox().setValue(weightClassChoiceBox.getValue());
+				RootViewController.getAddPlayerViewController().getWeightClassChoiceBox().setDisable(true);
+			}
+		}
 	}
 	
 	private void handlePlayerItemSelected(PlayerModel player) {

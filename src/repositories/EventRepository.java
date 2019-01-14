@@ -64,7 +64,7 @@ public class EventRepository {
 				mapper);
 	}
 	
-	public static Optional<EventModel> get(String name) {
+	public static Optional<EventModel> getByName(String name) {
 		List<EventModel> events = getEventsByNames(Arrays.asList(name));
 		
 		return events.isEmpty() ? Optional.empty() : Optional.ofNullable(events.get(0));
@@ -74,6 +74,12 @@ public class EventRepository {
 		String sql = "UPDATE events SET active = 0 WHERE id = ?";
 		
 		Db.getJdbcTemplate().update(sql, new Object[] {eventId});
+	}
+
+	public static List<EventModel> getByName() {
+		String sql = "SELECT * FROM events ORDER BY active DESC";
+
+		return Db.getJdbcTemplate().query(sql, mapper);
 	}
 
 }

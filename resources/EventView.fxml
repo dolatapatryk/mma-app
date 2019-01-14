@@ -15,7 +15,7 @@
       <TextField fx:id="player1TextField" disable="true" layoutX="380.0" layoutY="148.0" />
       <TextField fx:id="player2TextField" disable="true" layoutX="629.0" layoutY="148.0" />
       <Label fx:id="player1Label" layoutX="435.0" layoutY="119.0" text="Zawodnik 1" />
-      <Label layoutX="668.0" layoutY="119.0" text="Zawodnik 2" />
+      <Label fx:id="player2Label" layoutX="668.0" layoutY="119.0" text="Zawodnik 2" />
       <Button fx:id="fightButton" disable="true" layoutX="561.0" layoutY="148.0" mnemonicParsing="false" onAction="#handleFightButton" text="Walcz" />
       <ChoiceBox fx:id="judgeChoiceBox" layoutX="465.0" layoutY="193.0" prefHeight="26.0" prefWidth="249.0" />
       <ListView fx:id="fightListView" layoutX="744.0" layoutY="247.0" prefHeight="200.0" prefWidth="432.0" />
@@ -27,5 +27,7 @@
       <ChoiceBox fx:id="fightModeChoiceBox" layoutX="496.0" layoutY="82.0" prefHeight="26.0" prefWidth="171.0" />
       <Button fx:id="endEventButton" layoutX="16.0" layoutY="692.0" mnemonicParsing="false" onAction="#handleEndEventButton" text="Zakończ gale" />
       <Button fx:id="clearButton" layoutX="841.0" layoutY="148.0" mnemonicParsing="false" onAction="#handleClearButton" text="Czyść" />
+      <Label fx:id="weightLabel" layoutX="776.0" layoutY="571.0" text="Waga:" visible="false" />
+      <Text fx:id="weightClassText" layoutX="859.0" layoutY="583.0" strokeType="OUTSIDE" strokeWidth="0.0" />
    </children>
 </AnchorPane>

@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import lombok.Getter;
 import models.ClubModel;
 import models.CoachModel;
 import models.OrganisationModel;
@@ -41,8 +42,10 @@ public class AddPlayerViewController {
 	@FXML
 	private ChoiceBox<ClubModel> clubChoiceBox = new ChoiceBox<>();
 	@FXML
+	@Getter
 	private ChoiceBox<OrganisationModel> organisationChoiceBox = new ChoiceBox<>();
 	@FXML
+	@Getter
 	private ChoiceBox<WeightClassModel> weightClassChoiceBox = new ChoiceBox<>();
 	@FXML
 	private ChoiceBox<CoachModel> coachChoiceBox = new ChoiceBox<>();
