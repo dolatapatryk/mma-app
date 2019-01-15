@@ -52,7 +52,7 @@ public class AddContractViewController {
 			ContractModel contract = new ContractModel();
 
 			if (playerChoiceBox.getValue() == null || sponsorChoiceBox.getValue() == null
-					|| paymentTextField.getText().isEmpty() || fromDatePicker.getValue() == null
+					|| paymentTextField.getText().trim().isEmpty() || fromDatePicker.getValue() == null
 					|| toDatePicker.getValue() == null) {
 				throw new NoDataException();
 			} else {

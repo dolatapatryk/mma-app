@@ -28,8 +28,8 @@ public class AddOrganisationViewController {
 		try {
 			OrganisationModel org = new OrganisationModel();
 
-			if (nameTextField.getText().isEmpty() || budgetTextField.getText().isEmpty()
-					|| addressTextField.getText().isEmpty() || cityTextField.getText().isEmpty()) {
+			if (nameTextField.getText().trim().isEmpty() || budgetTextField.getText().trim().isEmpty()
+					|| addressTextField.getText().trim().isEmpty() || cityTextField.getText().trim().isEmpty()) {
 				throw new NoDataException();
 			} else {
 				org.setName(nameTextField.getText());

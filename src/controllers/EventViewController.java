@@ -67,6 +67,14 @@ public class EventViewController {
 	@FXML
 	private Label weightLabel;
 	@FXML
+    private Label nameLabel;
+	@FXML
+    private Label organisationLabel;
+	@FXML
+    private Label localisationLabel;
+	@FXML
+    private Label arenaLabel;
+	@FXML
 	private Text winnerText;
 	@FXML
 	private Text judgeText;
@@ -204,7 +212,7 @@ public class EventViewController {
 			if (player1TextField.getText().isEmpty()) {
 				player1TextField.setText(player.toString());
 				player1 = player;
-			} else if (player2TextField.getText().isEmpty()) {
+			} else if (player2TextField.getText().isEmpty() && !player.toString().equals(player1TextField.getText())) {
 				player2TextField.setText(player.toString());
 				player2 = player;
 				fightButton.setDisable(false);
@@ -236,7 +244,7 @@ public class EventViewController {
 
 			PlayerRepository.updateScore(fight);
 
-			if (fightModeChoiceBox.getValue().equals("Walka mistrzowska")) {
+			if (fightModeChoiceBox.getValue().equals("Walka mistrzowska") && winner != 0) {
 				Optional<ChampionModel> champOpt = ChampionRepository.get(event.getOrganisation(), weightClassChoiceBox.getValue().getName());
 				ChampionModel champTmp = new ChampionModel();
 				if (winner == 1)
@@ -282,6 +290,10 @@ public class EventViewController {
 		addListenerPlayerListItemSelected();
 		if(refreshPlayers)
 			playerListView.setCellFactory(defaultCellFactory);
+		nameLabel.setText(event.getName());
+		organisationLabel.setText(event.getOrganisation());
+		localisationLabel.setText(event.getCity() + ", " + event.getCountry());
+		arenaLabel.setText(event.getArena());
 	}
 	
 	private int doFight(PlayerModel player1, PlayerModel player2) {
@@ -305,8 +317,19 @@ public class EventViewController {
 			weightLabel.setVisible(true);
 			
 			PlayerModel winner;
-			if(fight.getWinner() == 0)
+			if(fight.getWinner() == 0) {
 				winnerText.setText("REMIS");
+				Optional<PlayerModel> playerOpt = PlayerRepository.get(fight.getPlayer1());
+				if(playerOpt.isPresent())
+					weightClassText.setText(playerOpt.get().getWeightClass().substring(5));
+				else {
+					Optional<PlayerModel> player2Opt = PlayerRepository.get(fight.getPlayer2());
+					if(player2Opt.isPresent())
+						weightClassText.setText(player2Opt.get().getWeightClass().substring(5));
+					else
+						weightClassText.setText("Nie znaleziono informacji o kategorii wagowej");
+				}
+			}
 			else if(fight.getWinner() == 1) {
 				Optional<PlayerModel> winnerOpt = PlayerRepository.get(fight.getPlayer1());
 				if(winnerOpt.isPresent()) {

@@ -34,10 +34,6 @@ public class OrganisationViewController {
 	private Text organisationAddressText;
 	@FXML
 	private Text organisationCityText;
-	//@FXML
-	//@Getter private Button refreshButton;
-	@FXML
-	private Button addPlayerButton;
 	@FXML
 	private ChoiceBox<WeightClassModel> weightClassChoiceBox = new ChoiceBox<>();
 	private ObservableList<WeightClassModel> weightClassItems;
@@ -69,7 +65,7 @@ public class OrganisationViewController {
 	@FXML
 	private TextField clinchTextField;
 	@FXML
-	private Button updateButton;
+	private Label clubAddrLabel;
 	@FXML
 	private Label idLabel;	
 	@FXML
@@ -213,6 +209,10 @@ public class OrganisationViewController {
 		nameTextField.setText(player.getName());
 		surnameTextField.setText(player.getSurname());
 		clubChoiceBox.setValue(player.getClub());
+		if(player.getClub() != null) {
+			ClubModel club = ClubRepository.get(player.getClub()).get();
+			clubAddrLabel.setText("Adres: " + club.getAddress() + ", " + club.getCity());
+		}
 		Optional<CoachModel> coachOpt = PersonRepository.getCoach(player.getCoach());
 		if(coachOpt.isPresent())
 			coachChoiceBox.setValue(coachOpt.get());
@@ -234,7 +234,7 @@ public class OrganisationViewController {
 				txt = txt + sponsors.get(i) + ", ";
 		}
 		sponsorText.setText(txt);
-		paymentText.setText("0");
+		paymentText.setText("0 zł/msc");
 		if(!sponsors.isEmpty())
 			paymentText.setText(String.format("%.2f zł/msc", PlayerRepository.calculatePayment(player.getId())));
 	}
@@ -279,6 +279,7 @@ public class OrganisationViewController {
 		paymentText.setText("");
 		clubChoiceBox.setValue(null);
 		coachChoiceBox.setValue(null);
+		clubAddrLabel.setText("");
 	}
 	
 	private void clearListenerPlayerListItemSelected() {

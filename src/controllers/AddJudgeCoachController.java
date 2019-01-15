@@ -54,7 +54,7 @@ public class AddJudgeCoachController {
 	private PersonModel readTextFields() throws NoDataException {
 		PersonModel p = new PersonModel();
 
-		if (nameTextField.getText().isEmpty() || surnameTextField.getText().isEmpty())
+		if (nameTextField.getText().trim().isEmpty() || surnameTextField.getText().trim().isEmpty())
 			throw new NoDataException();
 		else {
 			p.setName(nameTextField.getText());

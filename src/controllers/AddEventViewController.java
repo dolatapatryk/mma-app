@@ -53,19 +53,8 @@ public class AddEventViewController {
 		try {
 			EventModel event = new EventModel();
 
-			if (!nameTextField.getText().isEmpty())
-				event.setName(nameTextField.getText());
-			if (!countryTextField.getText().isEmpty())
-				event.setCountry(countryTextField.getText());
-			if (!cityTextField.getText().isEmpty())
-				event.setCity(cityTextField.getText());
-			if (!arenaTextField.getText().isEmpty())
-				event.setArena(arenaTextField.getText());
-			if (organisationChoiceBox.getValue() != null)
-				event.setOrganisation(organisationChoiceBox.getValue().getName());
-
-			if (nameTextField.getText().isEmpty() || countryTextField.getText().isEmpty()
-					|| cityTextField.getText().isEmpty() || arenaTextField.getText().isEmpty()
+			if (nameTextField.getText().trim().isEmpty() || countryTextField.getText().trim().isEmpty()
+					|| cityTextField.getText().trim().isEmpty() || arenaTextField.getText().trim().isEmpty()
 					|| organisationChoiceBox.getValue() == null) {
 				throw new NoDataException();
 			} else {

@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="739.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.EventViewController">
@@ -29,5 +30,16 @@
       <Button fx:id="clearButton" layoutX="841.0" layoutY="148.0" mnemonicParsing="false" onAction="#handleClearButton" text="Czyść" />
       <Label fx:id="weightLabel" layoutX="776.0" layoutY="571.0" text="Waga:" visible="false" />
       <Text fx:id="weightClassText" layoutX="859.0" layoutY="583.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Label layoutX="61.0" layoutY="515.0" text="Organizacja:" />
+      <Label layoutX="61.0" layoutY="555.0" text="Lokalizacja:" />
+      <Label layoutX="61.0" layoutY="603.0" text="Arena:" />
+      <Label fx:id="nameLabel" layoutX="47.0" layoutY="31.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="organisationLabel" layoutX="173.0" layoutY="515.0" />
+      <Label fx:id="localisationLabel" layoutX="173.0" layoutY="555.0" />
+      <Label fx:id="arenaLabel" layoutX="173.0" layoutY="603.0" />
    </children>
 </AnchorPane>

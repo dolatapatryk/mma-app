@@ -23,7 +23,7 @@ public class AddSponsorViewController {
 	private void handleOkButton() {
 		try {
 			SponsorModel s = new SponsorModel();
-			if (!nameTextField.getText().isEmpty())
+			if (!nameTextField.getText().trim().isEmpty())
 				s.setName(nameTextField.getText());
 			else
 				throw new NoDataException();

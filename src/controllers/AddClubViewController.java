@@ -26,8 +26,8 @@ public class AddClubViewController {
 		try {
 			ClubModel club = new ClubModel();
 
-			if (nameTextField.getText().isEmpty() || addressTextField.getText().isEmpty()
-					|| cityTextField.getText().isEmpty()) {
+			if (nameTextField.getText().trim().isEmpty() || addressTextField.getText().trim().isEmpty()
+					|| cityTextField.getText().trim().isEmpty()) {
 				throw new NoDataException();
 			} else {
 				club.setName(nameTextField.getText());

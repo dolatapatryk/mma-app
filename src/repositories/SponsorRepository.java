@@ -53,7 +53,7 @@ public class SponsorRepository {
 	
 	public static List<SponsorModel> getSponsorsByPlayerContracts(int playerId) {
 		String sql = "SELECT DISTINCT s.name FROM sponsors s JOIN contracts c ON s.name = c.sponsor "
-				+ "WHERE c.player = ? AND c.date_to >= ?";
+				+ "WHERE c.player = ? AND ? BETWEEN c.date_from AND date_to";
 		
 		return Db.getJdbcTemplate().query(sql, new Object[] {playerId, new Date(System.currentTimeMillis())}, mapper);
 	}

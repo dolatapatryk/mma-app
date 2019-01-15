@@ -76,7 +76,7 @@ public class AddPlayerViewController {
 		try {
 			PlayerModel player = new PlayerModel();
 
-			if (nameTextField.getText().isEmpty() || surnameTextField.getText().isEmpty()
+			if (nameTextField.getText().trim().isEmpty() || surnameTextField.getText().trim().isEmpty()
 					|| organisationChoiceBox.getValue() == null || weightClassChoiceBox.getValue() == null
 					|| coachChoiceBox.getValue() == null) {
 				throw new NoDataException();
@@ -195,6 +195,7 @@ public class AddPlayerViewController {
 			showEnterDataMessageDialog();
 		if(e instanceof NumberFormatException)
 			showIntegerMessageDialog();
-		e.printStackTrace();
+		else
+			e.printStackTrace();
 	}
 }
